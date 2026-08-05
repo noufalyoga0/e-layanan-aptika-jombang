@@ -26,6 +26,43 @@ Route::get('/test-db', function() {
     }
 });
 
+// ─── TAMBAH AKUN TEKNISI YANG HILANG (SATU KLIK) ─────────────────────────
+Route::get('/add-teknisi', function() {
+    $added = [];
+    $exists = [];
+
+    $teknisi = [
+        ['name' => 'Budi Raharjo (Staf TTE & BSRE)',       'email' => 'budi.tte@jombangkab.go.id',       'nip' => '199104152016021002'],
+        ['name' => 'Citra Dewi (Developer Integrasi API)',  'email' => 'citra.api@jombangkab.go.id',      'nip' => '199308222017042003'],
+        ['name' => 'Dian Pratama (Helpdesk IT Support)',    'email' => 'dian.helpdesk@jombangkab.go.id',  'nip' => '199511102019031004'],
+    ];
+
+    foreach ($teknisi as $t) {
+        $existing = \App\Models\User::where('email', $t['email'])->first();
+        if ($existing) {
+            $exists[] = $t['email'];
+        } else {
+            \App\Models\User::create([
+                'name'     => $t['name'],
+                'email'    => $t['email'],
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'role'     => 'teknisi',
+                'opd_name' => 'Diskominfo Kab. Jombang',
+                'nip'      => $t['nip'],
+            ]);
+            $added[] = $t['email'];
+        }
+    }
+
+    return response()->json([
+        'status'       => '✅ BERHASIL!',
+        'akun_dibuat'  => $added,
+        'sudah_ada'    => $exists,
+        'total_users'  => \App\Models\User::count(),
+        'semua_users'  => \App\Models\User::all(['name', 'email', 'role']),
+    ]);
+});
+
 // ─── PUBLIC (tidak perlu login) ─────────────────────────────────────────────
 Route::get('/', [LayananController::class, 'index'])->name('home');
 Route::get('/katalog', [LayananController::class, 'katalog'])->name('katalog');
