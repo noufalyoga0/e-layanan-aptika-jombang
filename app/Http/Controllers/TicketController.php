@@ -100,8 +100,15 @@ class TicketController extends Controller
     {
         $request->validate([
             'service_type' => 'required|string',
-            'subdomain'    => 'nullable|string|max:255',
+            'subdomain'    => 'required|string|max:255',
             'notes'        => 'nullable|string|max:1000',
+            'doc_0'        => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ], [
+            'subdomain.required' => 'Detail kebutuhan permohonan wajib diisi!',
+            'doc_0.required'     => 'Dokumen persyaratan wajib belum diunggah! Harap sertakan file dokumen permohonan.',
+            'doc_0.file'         => 'Dokumen persyaratan harus berupa file valid.',
+            'doc_0.mimes'        => 'Dokumen harus berformat PDF, JPG, JPEG, atau PNG.',
+            'doc_0.max'          => 'Ukuran file dokumen maksimal 5MB.',
         ]);
 
         $count = Ticket::count();

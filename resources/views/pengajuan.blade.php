@@ -13,7 +13,7 @@
                 <p class="text-slate-500 text-xs">Lengkapi formulir dan unggah dokumen persyaratan sesuai jenis layanan yang dimohon</p>
             </div>
 
-            <form action="{{ route('pengajuan.store', [], false) }}" method="POST">
+            <form action="{{ route('pengajuan.store', [], false) }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 {{-- Instansi Pemohon --}}
@@ -137,7 +137,7 @@
                     <span class="ms-auto text-3xs text-rose-600 font-bold">WAJIB</span>
                 </div>
                 <p class="text-3xs text-slate-500 mb-2">${doc.hint}</p>
-                <input type="file" name="doc_${idx}" class="form-control form-control-sm rounded-lg text-xs border-slate-200">
+                <input type="file" name="doc_${idx}" class="form-control form-control-sm rounded-lg text-xs border-slate-200" required>
             </div>
         `).join('');
     }
