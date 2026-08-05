@@ -19,6 +19,14 @@ Route::get('/test-db', function() {
             'users' => $users,
             'tickets' => $tickets
         ]);
+Route::get('/reset-db-now', function() {
+    try {
+        \Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+        return response()->json([
+            'status' => '✅ DATABASE DEMO BERHASIL DI-RESET DAN SEEDER DIPASANG ULANG 100%!',
+            'users' => \App\Models\User::all(['name', 'email', 'role']),
+            'tickets' => \App\Models\Ticket::all(['ticket_code', 'service_name', 'status', 'assigned_to'])
+        ]);
     } catch (\Throwable $e) {
         return response()->json(['error' => $e->getMessage()], 500);
     }
