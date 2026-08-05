@@ -13,7 +13,7 @@
                 <p class="text-slate-500 text-xs">Lengkapi formulir dan unggah dokumen persyaratan sesuai jenis layanan yang dimohon</p>
             </div>
 
-            <form action="{{ route('pengajuan.store') }}" method="POST">
+            <form action="{{ route('pengajuan.store', [], false) }}" method="POST">
                 @csrf
 
                 {{-- Instansi Pemohon --}}

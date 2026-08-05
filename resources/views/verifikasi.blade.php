@@ -92,7 +92,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
-                            <form action="{{ route('verifikasi.approve', $t['id']) }}" method="POST">
+                            <form action="{{ route('verifikasi.approve', $t['id'], false) }}" method="POST">
                                 @csrf
                                 <div class="modal-body p-6 space-y-4">
                                     <div class="bg-slate-50 rounded-2xl p-3 text-xs text-slate-600 mb-2">
@@ -148,7 +148,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
-                            <form action="{{ route('verifikasi.tolak', $t['id']) }}" method="POST">
+                            <form action="{{ route('verifikasi.tolak', $t['id'], false) }}" method="POST">
                                 @csrf
                                 <div class="modal-body p-6">
                                     <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3 text-xs text-rose-800 mb-4 font-semibold">

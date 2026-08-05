@@ -69,7 +69,7 @@
                             </td>
                             <td>
                                 @if($u->role !== 'super_admin')
-                                    <form action="{{ route('admin.users.delete', $u->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus akun {{ $u->name }}?')">
+                                    <form action="{{ route('admin.users.delete', $u->id, false) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus akun {{ $u->name }}?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger bg-rose-600 border-0 rounded-lg text-xs font-bold px-3 py-1">
@@ -97,7 +97,7 @@
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="{{ route('admin.users.store') }}" method="POST">
+                <form action="{{ route('admin.users.store', [], false) }}" method="POST">
                     @csrf
                     <div class="modal-body p-6 space-y-3">
                         <div>

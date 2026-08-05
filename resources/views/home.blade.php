@@ -20,7 +20,7 @@
             <h3 class="text-base font-bold text-slate-100 mb-3 flex items-center gap-2">
                 <i class="fa-solid fa-magnifying-glass text-cyan-300"></i> Lacak Status Tiket Layanan
             </h3>
-            <form action="{{ route('tickets.index') }}" method="GET" class="flex gap-2 mb-3">
+            <form action="{{ route('tickets.index', [], false) }}" method="GET" class="flex gap-2 mb-3">
                 <input type="text" name="search" class="form-control form-control-lg border-0 text-slate-900 rounded-xl shadow-sm text-sm" placeholder="Masukkan Nomor Resi Tiket (contoh: REQ-JBG-202608-001)" required>
                 <button type="submit" class="btn btn-emerald px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow">
                     Lacak Tiket

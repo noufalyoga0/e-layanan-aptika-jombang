@@ -166,7 +166,7 @@
                                 } }}
                             </div>
                         </div>
-                        <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                        <form action="{{ route('logout', [], false) }}" method="POST" style="display:inline;">
                             @csrf
                             <button type="submit" style="background:#fee2e2; color:#991b1b; border:none; padding:5px 11px; border-radius:7px; font-size:0.75rem; font-weight:700; cursor:pointer;">
                                 <i class="fa-solid fa-right-from-bracket"></i> Keluar

@@ -19,7 +19,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('register.post') }}" method="POST">
+            <form action="{{ route('register.post', [], false) }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider">Nama Lengkap Petugas</label>

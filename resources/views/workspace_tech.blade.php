@@ -90,7 +90,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
-                            <form action="{{ route('workspace.selesai', $t['id']) }}" method="POST">
+                            <form action="{{ route('workspace.selesai', $t['id'], false) }}" method="POST">
                                 @csrf
                                 <div class="modal-body p-6">
                                     <div class="bg-slate-50 rounded-2xl p-3 text-xs text-slate-600 mb-4">
