@@ -19,6 +19,11 @@ Route::get('/test-db', function() {
             'users' => $users,
             'tickets' => $tickets
         ]);
+    } catch (\Throwable $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+});
+
 Route::get('/reset-db-now', function() {
     try {
         \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
