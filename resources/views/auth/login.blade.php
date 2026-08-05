@@ -55,18 +55,34 @@
                         <i class="fa-solid fa-crown text-amber-400 me-1"></i> Noufal Yoga Salsabila (Super Admin Developer)
                     </button>
                 </div>
-                <div class="grid grid-cols-2 gap-1.5 text-3xs font-semibold">
+                <div class="grid grid-cols-2 gap-1.5 text-3xs font-semibold mb-2">
                     <button type="button" onclick="fillLogin('dinkes@jombangkab.go.id')" class="btn btn-sm btn-light border rounded-lg text-xs py-1">
                         <i class="fa-solid fa-building me-1 text-blue-700"></i> Admin Dinkes
                     </button>
                     <button type="button" onclick="fillLogin('aptika@jombangkab.go.id')" class="btn btn-sm btn-light border rounded-lg text-xs py-1">
                         <i class="fa-solid fa-user-shield me-1 text-amber-600"></i> Verifikator
                     </button>
+                </div>
+                <div class="border-t border-slate-200 my-2 pt-2 text-center text-3xs text-slate-500 font-bold">
+                    <i class="fa-solid fa-users me-1"></i> PILIH STAF TEKNISI DEMO:
+                </div>
+                <div class="grid grid-cols-2 gap-1.5 text-3xs font-semibold mb-2">
                     <button type="button" onclick="fillLogin('agus.teknisi@jombangkab.go.id')" class="btn btn-sm btn-light border rounded-lg text-xs py-1">
-                        <i class="fa-solid fa-laptop-code me-1 text-cyan-600"></i> Staf Teknisi
+                        💻 Agus (Server)
                     </button>
-                    <button type="button" onclick="fillLogin('kabid.aptika@jombangkab.go.id')" class="btn btn-sm btn-light border rounded-lg text-xs py-1">
-                        <i class="fa-solid fa-chart-pie me-1 text-purple-600"></i> Kabid APTIKA
+                    <button type="button" onclick="fillLogin('budi.tte@jombangkab.go.id')" class="btn btn-sm btn-light border rounded-lg text-xs py-1">
+                        ✍️ Budi (TTE BSRE)
+                    </button>
+                    <button type="button" onclick="fillLogin('citra.api@jombangkab.go.id')" class="btn btn-sm btn-light border rounded-lg text-xs py-1">
+                        🔗 Citra (API)
+                    </button>
+                    <button type="button" onclick="fillLogin('dian.helpdesk@jombangkab.go.id')" class="btn btn-sm btn-light border rounded-lg text-xs py-1">
+                        🛠️ Dian (Helpdesk)
+                    </button>
+                </div>
+                <div class="border-t border-slate-200 my-2 pt-2">
+                    <button type="button" onclick="fillLogin('kabid.aptika@jombangkab.go.id')" class="btn btn-sm btn-light border w-100 rounded-lg text-xs py-1 font-semibold">
+                        <i class="fa-solid fa-chart-pie me-1 text-purple-600"></i> Kabid APTIKA (Executive)
                     </button>
                 </div>
             </div>

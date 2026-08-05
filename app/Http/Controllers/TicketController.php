@@ -57,11 +57,14 @@ class TicketController extends Controller
 
     public function workspaceTech()
     {
-        $techTickets = Ticket::with('logs')
-            ->whereIn('status', ['disposisi', 'diproses'])
-            ->latest()
-            ->get()
-            ->toArray();
+        $query = Ticket::with('logs')->whereIn('status', ['disposisi', 'diproses']);
+
+        // Jika yang login adalah teknisi, filter hanya tugas milik dia saja
+        if (\Illuminate\Support\Facades::Auth::user()->role === 'teknisi') {
+            $query->where('assigned_to', \Illuminate\Support\Facades::Auth::user()->name);
+        }
+
+        $techTickets = $query->latest()->get()->toArray();
 
         $techTickets = array_map(function ($t) {
             $t['id'] = $t['ticket_code'];

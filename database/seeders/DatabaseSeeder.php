@@ -80,12 +80,39 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::create([
-            'name'     => 'Agus Setiawan (Teknisi Server)',
+            'name'     => 'Agus Setiawan (Teknisi Server/Hosting)',
             'email'    => 'agus.teknisi@jombangkab.go.id',
             'password' => Hash::make('password'),
             'role'     => 'teknisi',
             'opd_name' => 'Diskominfo Kab. Jombang',
             'nip'      => '199001122015031001',
+        ]);
+
+        User::create([
+            'name'     => 'Budi Raharjo (Staf TTE & BSRE)',
+            'email'    => 'budi.tte@jombangkab.go.id',
+            'password' => Hash::make('password'),
+            'role'     => 'teknisi',
+            'opd_name' => 'Diskominfo Kab. Jombang',
+            'nip'      => '199104152016021002',
+        ]);
+
+        User::create([
+            'name'     => 'Citra Dewi (Developer Integrasi API)',
+            'email'    => 'citra.api@jombangkab.go.id',
+            'password' => Hash::make('password'),
+            'role'     => 'teknisi',
+            'opd_name' => 'Diskominfo Kab. Jombang',
+            'nip'      => '199308222017042003',
+        ]);
+
+        User::create([
+            'name'     => 'Dian Pratama (Helpdesk IT Support)',
+            'email'    => 'dian.helpdesk@jombangkab.go.id',
+            'password' => Hash::make('password'),
+            'role'     => 'teknisi',
+            'opd_name' => 'Diskominfo Kab. Jombang',
+            'nip'      => '199511102019031004',
         ]);
 
         User::create([
