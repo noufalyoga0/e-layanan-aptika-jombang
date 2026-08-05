@@ -21,7 +21,15 @@ Route::get('/test-db', function() {
         ]);
 Route::get('/reset-db-now', function() {
     try {
-        \Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        \App\Models\TicketLog::truncate();
+        \App\Models\Ticket::truncate();
+        \App\Models\User::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
+        $seeder = new \Database\Seeders\DatabaseSeeder();
+        $seeder->run();
+
         return response()->json([
             'status' => '✅ DATABASE DEMO BERHASIL DI-RESET DAN SEEDER DIPASANG ULANG 100%!',
             'users' => \App\Models\User::all(['name', 'email', 'role']),
