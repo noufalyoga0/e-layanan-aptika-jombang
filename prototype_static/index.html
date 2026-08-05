@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Layanan APTIKA - Diskominfo Kabupaten Jombang</title>
+    <meta name="description" content="Sistem Informasi Pelayanan & Helpdesk APTIKA Diskominfo Kabupaten Jombang. Digitalisasi Layanan Subdomain, Hosting, TTE BSRE, API Integration & IT Support OPD.">
+    
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome & Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Role Simulator Switcher Bar -->
+    <div class="role-bar">
+        <div class="role-container">
+            <span class="role-label"><i class="fa-solid fa-user-gear"></i> Mode Simulasi Role:</span>
+            <div class="role-buttons">
+                <button class="role-btn active" data-role="guest" onclick="switchRole('guest')">
+                    <i class="fa-solid fa-globe"></i> Publik / Lacak Tiket
+                </button>
+                <button class="role-btn" data-role="opd" onclick="switchRole('opd')">
+                    <i class="fa-solid fa-building-user"></i> Admin OPD (Dinkes)
+                </button>
+                <button class="role-btn" data-role="admin_aptika" onclick="switchRole('admin_aptika')">
+                    <i class="fa-solid fa-user-shield"></i> Verifikator APTIKA
+                </button>
+                <button class="role-btn" data-role="teknisi" onclick="switchRole('teknisi')">
+                    <i class="fa-solid fa-laptop-code"></i> Staf Teknisi (Server)
+                </button>
+                <button class="role-btn" data-role="kabid" onclick="switchRole('kabid')">
+                    <i class="fa-solid fa-chart-pie"></i> Kabid APTIKA (Executive)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="logo-box">
+                    <i class="fa-solid fa-network-wired"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>E-LAYANAN <span>APTIKA</span></h1>
+                    <p>Diskominfo Kabupaten Jombang</p>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#" class="nav-item active" data-view="home" onclick="switchView('home')">
+                    <i class="fa-solid fa-house"></i> Beranda
+                </a>
+                <a href="#" class="nav-item" data-view="katalog" onclick="switchView('katalog')">
+                    <i class="fa-solid fa-layer-group"></i> Katalog Layanan
+                </a>
+                <a href="#" class="nav-item opd-only" data-view="pengajuan-baru" onclick="switchView('pengajuan-baru')">
+                    <i class="fa-solid fa-plus-circle"></i> Buat Pengajuan
+                </a>
+                <a href="#" class="nav-item auth-only" data-view="my-tickets" onclick="switchView('my-tickets')">
+                    <i class="fa-solid fa-ticket"></i> Daftar Tiket <span class="badge-count" id="ticket-badge">0</span>
+                </a>
+                <a href="#" class="nav-item admin-only" data-view="verifikasi" onclick="switchView('verifikasi')">
+                    <i class="fa-solid fa-list-check"></i> Meja Verifikasi <span class="badge-count badge-warning" id="pending-badge">0</span>
+                </a>
+                <a href="#" class="nav-item tech-only" data-view="workspace-tech" onclick="switchView('workspace-tech')">
+                    <i class="fa-solid fa-sliders"></i> Workspace Teknisi <span class="badge-count badge-info" id="tech-badge">0</span>
+                </a>
+                <a href="#" class="nav-item kabid-only" data-view="analytics" onclick="switchView('analytics')">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard SLA & SPBE
+                </a>
+            </nav>
+
+            <div class="user-profile-header">
+                <div class="avatar" id="user-avatar">P</div>
+                <div class="user-info">
+                    <span class="user-name" id="user-display-name">Tamu (Publik)</span>
+                    <span class="user-role-badge" id="user-role-tag">Guest</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+        <!-- VIEW 1: HOME / LANDING PAGE -->
+        <section id="view-home" class="view-section active">
+            <!-- Hero Banner -->
+            <div class="hero-banner">
+                <div class="hero-badge">
+                    <i class="fa-solid fa-shield-halved"></i> SPBE Kabupaten Jombang Indeks 3,91 (Sangat Baik)
+                </div>
+                <h2>Digitalisasi Layanan APTIKA Pemkab Jombang</h2>
+                <p>Satu portal terpadu pengajuan Subdomain, Hosting VPS, Tanda Tangan Elektronik (TTE BSRE), Integrasi API, dan Support IT untuk seluruh OPD Kabupaten Jombang.</p>
+                
+                <!-- Quick Ticket Tracking Box -->
+                <div class="hero-tracker-card">
+                    <div class="tracker-header">
+                        <i class="fa-solid fa-magnifying-glass"></i> Lacak Status Pengajuan Layanan
+                    </div>
+                    <form onsubmit="handleTrackTicket(event)" class="tracker-form">
+                        <input type="text" id="track-input" placeholder="Masukkan Nomor Tiket (Contoh: REQ-JBG-202608-001)" required>
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Lacak Tiket</button>
+                    </form>
+                    <div class="sample-tickets-bar">
+                        <span>Coba Tiket Contoh:</span>
+                        <a href="#" onclick="quickTrack('REQ-JBG-202608-001')">REQ-JBG-202608-001 (Hosting Dinkes)</a>
+                        <a href="#" onclick="quickTrack('REQ-JBG-202608-002')">REQ-JBG-202608-002 (TTE Disdik)</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon icon-blue"><i class="fa-solid fa-folder-open"></i></div>
+                    <div class="stat-data">
+                        <h3 id="stat-total-req">142</h3>
+                        <p>Total Pengajuan 2026</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-green"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="stat-data">
+                        <h3 id="stat-completed-req">128</h3>
+                        <p>Pengajuan Selesai</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-orange"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div class="stat-data">
+                        <h3 id="stat-active-req">14</h3>
+                        <p>Sedang Diproses</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-purple"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="stat-data">
+                        <h3>1.8 Hari</h3>
+                        <p>Rata-rata Waktu SLA</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Quick Catalog Section -->
+            <div class="section-title-box">
+                <h2>Layanan Bidang APTIKA</h2>
+                <p>Pilih kategori layanan digital resmi dari Diskominfo Kabupaten Jombang</p>
+            </div>
+            
+            <div class="services-grid" id="home-services-list">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+
+        <!-- VIEW 2: KATALOG LAYANAN -->
+        <section id="view-katalog" class="view-section">
+            <div class="section-title-box text-left">
+                <h2>Katalog Layanan Digital APTIKA</h2>
+                <p>Panduan persyaratan dokumen dan estimasi waktu penyelesaian layanan (SLA)</p>
+            </div>
+            
+            <div class="services-grid" id="full-services-list">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+
+        <!-- VIEW 3: FORM PENGAJUAN BARU (FOR OPD) -->
+        <section id="view-pengajuan-baru" class="view-section">
+            <div class="form-wizard-card">
+                <div class="wizard-header">
+                    <h2><i class="fa-solid fa-file-pen"></i> Form Pengajuan Layanan APTIKA</h2>
+                    <p>Lengkapi formulir di bawah ini beserta Surat Permohonan Resmi bertanda tangan Kepala Dinas</p>
+                </div>
+
+                <!-- Wizard Progress Steps -->
+                <div class="wizard-steps">
+                    <div class="step-item active" id="step-node-1">
+                        <span class="step-num">1</span>
+                        <span class="step-text">Pilih Layanan</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-item" id="step-node-2">
+                        <span class="step-num">2</span>
+                        <span class="step-text">Detail Kebutuhan</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-item" id="step-node-3">
+                        <span class="step-num">3</span>
+                        <span class="step-text">Upload Berkas</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-item" id="step-node-4">
+                        <span class="step-num">4</span>
+                        <span class="step-text">Konfirmasi</span>
+                    </div>
+                </div>
+
+                <!-- Form Content -->
+                <form id="submission-form" onsubmit="handleFormSubmit(event)">
+                    <!-- Step 1: Select Service -->
+                    <div class="wizard-step-content active" id="step-1">
+                        <h3>Pilih Kategori Layanan:</h3>
+                        <div class="service-selector-grid">
+                            <label class="service-option-card">
+                                <input type="radio" name="service_type" value="subdomain_hosting" checked onchange="updateFormFields()">
+                                <div class="option-content">
+                                    <i class="fa-solid fa-server icon"></i>
+                                    <h4>Subdomain & Hosting VPS</h4>
+                                    <p>Permohonan URL `dinas.jombangkab.go.id` & Hosting Web/App</p>
+                                </div>
+                            </label>
+
+                            <label class="service-option-card">
+                                <input type="radio" name="service_type" value="tte_bsre" onchange="updateFormFields()">
+                                <div class="option-content">
+                                    <i class="fa-solid fa-signature icon"></i>
+                                    <h4>Sertifikat Elektronik / TTE</h4>
+                                    <p>Penerbitan Tanda Tangan Elektronik BSRE BSSN untuk ASN</p>
+                                </div>
+                            </label>
+
+                            <label class="service-option-card">
+                                <input type="radio" name="service_type" value="integrasi_api" onchange="updateFormFields()">
+                                <div class="option-content">
+                                    <i class="fa-solid fa-code-branch icon"></i>
+                                    <h4>Integrasi API & SPLP Data</h4>
+                                    <p>Permohonan akses Data Warehouse & Interoperabilitas Sistem</p>
+                                </div>
+                            </label>
+
+                            <label class="service-option-card">
+                                <input type="radio" name="service_type" value="helpdesk_it" onchange="updateFormFields()">
+                                <div class="option-content">
+                                    <i class="fa-solid fa-headset icon"></i>
+                                    <h4>Helpdesk & Trouble Ticket IT</h4>
+                                    <p>Penanganan masalah Server Down, Bug Website & Jaringan Intra</p>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="wizard-actions right">
+                            <button type="button" class="btn btn-primary" onclick="goToStep(2)">Lanjut <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Dynamic Detail Fields -->
+                    <div class="wizard-step-content" id="step-2">
+                        <h3 id="step2-title">Isi Detail Spesifikasi Kebutuhan</h3>
+                        <div class="form-group-grid" id="dynamic-fields-container">
+                            <!-- Injected by JS -->
+                        </div>
+                        <div class="form-group">
+                            <label>Deskripsi/Catatan Tambahan untuk APTIKA:</label>
+                            <textarea id="field-notes" rows="3" placeholder="Tuliskan latar belakang permohonan atau keterangan khusus jika ada..."></textarea>
+                        </div>
+                        <div class="wizard-actions">
+                            <button type="button" class="btn btn-secondary" onclick="goToStep(1)"><i class="fa-solid fa-arrow-left"></i> Kembali</button>
+                            <button type="button" class="btn btn-primary" onclick="goToStep(3)">Lanjut Berkas <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Upload Documents -->
+                    <div class="wizard-step-content" id="step-3">
+                        <h3>Unggah Dokumen Persyaratan</h3>
+                        <p class="subtext">Format file PDF/JPG/PNG max 5MB per dokumen.</p>
+                        
+                        <div class="upload-box-list" id="upload-requirements-container">
+                            <!-- Injected dynamically -->
+                        </div>
+
+                        <div class="wizard-actions">
+                            <button type="button" class="btn btn-secondary" onclick="goToStep(2)"><i class="fa-solid fa-arrow-left"></i> Kembali</button>
+                            <button type="button" class="btn btn-primary" onclick="goToStep(4)">Review Final <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Summary & Submit -->
+                    <div class="wizard-step-content" id="step-4">
+                        <h3>Ringkasan Permohonan</h3>
+                        <div class="summary-card" id="summary-container">
+                            <!-- Injected dynamically -->
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Dengan menekan tombol <strong>Kirim Pengajuan</strong>, Anda menyatakan bahwa dokumen yang diunggah adalah resmi dari Organisasi Perangkat Daerah yang bersangkutan.
+                        </div>
+
+                        <div class="wizard-actions">
+                            <button type="button" class="btn btn-secondary" onclick="goToStep(3)"><i class="fa-solid fa-arrow-left"></i> Kembali Edit</button>
+                            <button type="submit" class="btn btn-success"><i class="fa-solid fa-paper-plane"></i> Kirim Pengajuan Resmi</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- VIEW 4: MY TICKETS / DAFTAR TIKET (OPD / GLOBAL) -->
+        <section id="view-my-tickets" class="view-section">
+            <div class="table-container-card">
+                <div class="table-header">
+                    <div>
+                        <h2>Daftar Tiket Pengajuan</h2>
+                        <p>Monitoring progres dan unduh Berita Acara (BAST) layanan</p>
+                    </div>
+                    <div class="table-filter-bar">
+                        <select id="filter-status" onchange="renderTicketsTable()">
+                            <option value="all">Semua Status</option>
+                            <option value="menunggu_verifikasi">Menunggu Verifikasi</option>
+                            <option value="disposisi">Disposisi Teknisi</option>
+                            <option value="diproses">Dalam Pengerjaan</option>
+                            <option value="selesai">Selesai</option>
+                            <option value="ditolak">Ditolak</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No. Tiket</th>
+                                <th>Tanggal</th>
+                                <th>Instansi / OPD</th>
+                                <th>Layanan</th>
+                                <th>Status</th>
+                                <th>Teknisi PIC</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tickets-table-body">
+                            <!-- Dynamic Content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- VIEW 5: MEJA VERIFIKASI ADMIN APTIKA -->
+        <section id="view-verifikasi" class="view-section">
+            <div class="section-title-box text-left">
+                <h2>Meja Kerja Verifikator APTIKA</h2>
+                <p>Verifikasi kelengkapan berkas OPD & disposisikan ke Staf Teknisi</p>
+            </div>
+
+            <div class="queue-grid" id="verification-cards-container">
+                <!-- Injected dynamically -->
+            </div>
+        </section>
+
+
+        <!-- VIEW 6: WORKSPACE TEKNISI -->
+        <section id="view-workspace-tech" class="view-section">
+            <div class="section-title-box text-left">
+                <h2>Workspace Eksekusi Teknisi APTIKA</h2>
+                <p>Daftar tugas pengerjaan server, subdomain, TTE, dan integrasi API yang didisposisikan ke Anda</p>
+            </div>
+
+            <div class="tech-workspace-grid" id="tech-cards-container">
+                <!-- Injected dynamically -->
+            </div>
+        </section>
+
+
+        <!-- VIEW 7: DASHBOARD SLA & ANALYTICS (KABID) -->
+        <section id="view-analytics" class="view-section">
+            <div class="executive-banner">
+                <div>
+                    <h2>Executive Dashboard SPBE & SLA APTIKA</h2>
+                    <p>Statistik Kinerja Pelayanan & Indikator Sistem Pemerintahan Berbasis Elektronik Kabupaten Jombang</p>
+                </div>
+                <button class="btn btn-light" onclick="exportReportExcel()"><i class="fa-solid fa-file-excel"></i> Export Rekap Excel</button>
+            </div>
+
+            <div class="stats-grid mt-4">
+                <div class="stat-card border-top-blue">
+                    <div class="stat-data">
+                        <h3>98.2%</h3>
+                        <p>Kepatuhan SLA Layanan</p>
+                    </div>
+                </div>
+                <div class="stat-card border-top-green">
+                    <div class="stat-data">
+                        <h3>24 Jam</h3>
+                        <p>Rata-rata Respon Verifikasi</p>
+                    </div>
+                </div>
+                <div class="stat-card border-top-purple">
+                    <div class="stat-data">
+                        <h3>34 OPD</h3>
+                        <p>Terlayani di 2026</p>
+                    </div>
+                </div>
+                <div class="stat-card border-top-orange">
+                    <div class="stat-data">
+                        <h3>4.8 / 5.0</h3>
+                        <p>Indeks Kepuasan Layanan</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Container Grid -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-chart-column"></i> Tren Pengajuan Layanan APTIKA 2026</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="chart-trend"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-chart-pie"></i> Distribusi Kategori Layanan</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="chart-category"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- MODALS SECTION -->
+
+    <!-- Modal 1: Ticket Details & Tracking Progress Timeline -->
+    <div class="modal-overlay" id="modal-ticket-detail">
+        <div class="modal-card modal-lg">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-circle-info"></i> Detail & Tracking Tiket: <span id="modal-ticket-code"></span></h3>
+                <button class="modal-close" onclick="closeModal('modal-ticket-detail')">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-ticket-body">
+                <!-- Dynamic Content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-ticket-detail')">Tutup</button>
+                <button class="btn btn-primary" id="btn-print-bast" onclick="printBAST()"><i class="fa-solid fa-print"></i> Cetak BAST (PDF)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Admin Disposition Modal -->
+    <div class="modal-overlay" id="modal-disposition">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-check"></i> Disposisi ke Teknisi APTIKA</h3>
+                <button class="modal-close" onclick="closeModal('modal-disposition')">&times;</button>
+            </div>
+            <form onsubmit="handleSaveDisposition(event)">
+                <input type="hidden" id="disp-ticket-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Pilih Teknisi PIC Penanggung Jawab:</label>
+                        <select id="disp-tech-select" class="form-control" required>
+                            <option value="Agus Setiawan (Teknisi Server/Hosting)">Agus Setiawan (Staf Server & Network)</option>
+                            <option value="Budi Raharjo (Staf TTE & BSRE)">Budi Raharjo (Staf Keamanan & TTE)</option>
+                            <option value="Citra Dewi (Staf Integrasi API)">Citra Dewi (Developer Integrasi API)</option>
+                            <option value="Dian Pratama (Staf Web Helpdesk)">Dian Pratama (Helpdesk IT Support)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Instruksi & Catatan Disposisi:</label>
+                        <textarea id="disp-notes" rows="3" placeholder="Masukkan instruksi pengerjaan untuk teknisi..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-disposition')">Batal</button>
+                    <button type="submit" class="btn btn-success"><i class="fa-solid fa-paper-plane"></i> Kirim Disposisi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Tech Result Entry Modal -->
+    <div class="modal-overlay" id="modal-tech-resolve">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-check-double"></i> Penyelesaian Pengerjaan Tiket</h3>
+                <button class="modal-close" onclick="closeModal('modal-tech-resolve')">&times;</button>
+            </div>
+            <form onsubmit="handleSaveTechResolve(event)">
+                <input type="hidden" id="resolve-ticket-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Hasil Pengerjaan Teknisi (Misal IP Server, Link Subdomain, Kode TTE):</label>
+                        <textarea id="resolve-notes" rows="3" placeholder="Contoh: Subdomain https://dinkes.jombangkab.go.id berhasil di-pointing ke Server IP 103.14.xx.xx. SSL Let's Encrypt Aktif." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload File Bukti / Berita Acara (Simulasi):</label>
+                        <input type="file" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-tech-resolve')">Batal</button>
+                    <button type="submit" class="btn btn-success"><i class="fa-solid fa-circle-check"></i> Tandai Selesai</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
