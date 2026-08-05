@@ -3,6 +3,17 @@
 @section('title', 'Workspace Teknisi - Diskominfo Jombang')
 
 @section('content')
+@php
+    $u = Auth::user();
+    if ($u && !in_array($u->role, ['super_admin', 'admin_aptika', 'kabid'])) {
+        $nameKey = strtolower(explode(' ', trim($u->name))[0]);
+        $techTickets = array_filter($techTickets, function($t) use ($nameKey) {
+            $assigned = strtolower($t['assigned_to'] ?? '');
+            return str_contains($assigned, $nameKey);
+        });
+    }
+@endphp
+
     <div class="mb-6">
         <h1 class="text-3xl font-extrabold text-blue-950 mb-1">Workspace Eksekusi Teknisi APTIKA</h1>
         <p class="text-slate-500 text-sm">Daftar tugas yang didisposisikan kepadamu. Kerjakan dan tandai selesai beserta hasil pengerjaan teknis.</p>
