@@ -40,6 +40,7 @@ Route::get('/add-teknisi', function() {
     foreach ($teknisi as $t) {
         $existing = \App\Models\User::where('email', $t['email'])->first();
         if ($existing) {
+            $existing->update(['role' => 'teknisi', 'name' => $t['name']]);
             $exists[] = $t['email'];
         } else {
             \App\Models\User::create([

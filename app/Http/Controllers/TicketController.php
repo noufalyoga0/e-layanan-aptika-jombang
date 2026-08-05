@@ -61,13 +61,16 @@ class TicketController extends Controller
 
         $user = \Illuminate\Support\Facades\Auth::user();
 
-        // Jika yang login bukan admin/kabid (yaitu staf teknisi), filter tugas spesifik milik dia saja
-        if ($user && !in_array($user->role, ['super_admin', 'admin_aptika', 'kabid'])) {
-            $firstName = explode(' ', trim($user->name))[0]; // e.g. "Dian", "Budi", "Agus", "Citra"
-            $query->where(function($q) use ($user, $firstName) {
-                $q->where('assigned_to', $user->name)
-                  ->orWhere('assigned_to', 'LIKE', '%' . $firstName . '%');
-            });
+        // Proteksi Ganda: Jika user adalah teknisi (Agus, Budi, Citra, Dian), WAKTU FILTER HANYA TIKET TERSEBUT
+        if ($user) {
+            $role = strtolower(trim($user->role));
+            if ($role === 'teknisi' || !in_array($role, ['super_admin', 'admin_aptika', 'kabid'])) {
+                $firstName = explode(' ', trim($user->name))[0]; // "Agus", "Budi", "Citra", "Dian"
+                $query->where(function ($q) use ($user, $firstName) {
+                    $q->where('assigned_to', '=', $user->name)
+                      ->orWhere('assigned_to', 'LIKE', '%' . $firstName . '%');
+                });
+            }
         }
 
         $techTickets = $query->latest()->get()->toArray();
