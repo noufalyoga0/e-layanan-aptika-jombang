@@ -5,6 +5,27 @@ use App\Http\Controllers\LayananController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AuthController;
 
+// ─── DEBUG ROUTE UNTUK DIAGNOSA RAILWAY ──────────────────────────────────
+Route::get('/test-db', function() {
+    try {
+        \DB::connection()->getPdo();
+        $userCount = \App\Models\User::count();
+        $users = \App\Models\User::all(['name', 'email', 'role']);
+        return response()->json([
+            'status' => '✅ CONNECTED TO DATABASE SUCCESS!',
+            'database_name' => \DB::connection()->getDatabaseName(),
+            'driver' => \DB::connection()->getDriverName(),
+            'user_count' => $userCount,
+            'users' => $users
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => '❌ DATABASE ERROR',
+            'error_message' => $e->getMessage()
+        ], 500);
+    }
+});
+
 // ─── PUBLIC (tidak perlu login) ─────────────────────────────────────────────
 Route::get('/', [LayananController::class, 'index'])->name('home');
 Route::get('/katalog', [LayananController::class, 'katalog'])->name('katalog');
