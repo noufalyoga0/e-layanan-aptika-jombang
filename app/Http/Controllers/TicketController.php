@@ -60,8 +60,8 @@ class TicketController extends Controller
         $query = Ticket::with('logs')->whereIn('status', ['disposisi', 'diproses']);
 
         // Jika yang login adalah teknisi, filter hanya tugas milik dia saja
-        if (\Illuminate\Support\Facades::Auth::user()->role === 'teknisi') {
-            $query->where('assigned_to', \Illuminate\Support\Facades::Auth::user()->name);
+        if (\Illuminate\Support\Facades\Auth::user()->role === 'teknisi') {
+            $query->where('assigned_to', \Illuminate\Support\Facades\Auth::user()->name);
         }
 
         $techTickets = $query->latest()->get()->toArray();
