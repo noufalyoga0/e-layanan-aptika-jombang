@@ -223,7 +223,10 @@ class TicketController extends Controller
 
     public function resetDemo()
     {
-        \Artisan::call('migrate:fresh --seed');
+        \Artisan::call('migrate:fresh', [
+            '--seed'  => true,
+            '--force' => true,
+        ]);
         return redirect()->route('tickets.index')
             ->with('success', '🔄 Database MySQL berhasil di-reset & di-seed ke kondisi awal!');
     }
