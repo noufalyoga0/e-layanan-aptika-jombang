@@ -35,10 +35,33 @@ Route::get('/reset-db-now', function() {
         $seeder = new \Database\Seeders\DatabaseSeeder();
         $seeder->run();
 
+        \Artisan::call('view:clear');
+        \Artisan::call('cache:clear');
+        if (function_exists('opcache_reset')) {
+            @opcache_reset();
+        }
+
         return response()->json([
             'status' => '✅ DATABASE DEMO BERHASIL DI-RESET DAN SEEDER DIPASANG ULANG 100%!',
             'users' => \App\Models\User::all(['name', 'email', 'role']),
             'tickets' => \App\Models\Ticket::all(['ticket_code', 'service_name', 'status', 'assigned_to'])
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+});
+
+Route::get('/clear-all-cache', function() {
+    try {
+        \Artisan::call('view:clear');
+        \Artisan::call('cache:clear');
+        \Artisan::call('route:clear');
+        \Artisan::call('config:clear');
+        if (function_exists('opcache_reset')) {
+            @opcache_reset();
+        }
+        return response()->json([
+            'status' => '✅ SEMUA CACHE TAMPILAN (VIEW), ROUTE & OPCACHE BERHASIL DIBERSIHKAN TOTAL!'
         ]);
     } catch (\Throwable $e) {
         return response()->json(['error' => $e->getMessage()], 500);
