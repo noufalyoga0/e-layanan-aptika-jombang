@@ -20,7 +20,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('pengajuan.store', [], false) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('pengajuan.store', [], false) }}" method="POST" enctype="multipart/form-data" id="form-pengajuan" onsubmit="return validateFiles(event)">
                 @csrf
 
                 {{-- Instansi Pemohon --}}
@@ -144,9 +144,35 @@
                     <span class="ms-auto text-3xs text-rose-600 font-bold">WAJIB</span>
                 </div>
                 <p class="text-3xs text-slate-500 mb-2">${doc.hint}</p>
-                <input type="file" name="doc_${idx}" class="form-control form-control-sm rounded-lg text-xs border-slate-200" required>
+                <input type="file" name="doc_${idx}" id="doc_input_${idx}" class="form-control form-control-sm rounded-lg text-xs border-slate-200" required>
             </div>
         `).join('');
+    }
+
+    // ============================================================
+    // VALIDASI INTEGRITAS BERKAS DOKUMEN WAJIB
+    // ============================================================
+    function validateFiles(e) {
+        const fileInputs = document.querySelectorAll('#docs_container input[type="file"]');
+        let allFilled = true;
+        let missingNames = [];
+
+        fileInputs.forEach((input, idx) => {
+            if (!input.files || input.files.length === 0) {
+                allFilled = false;
+                input.style.border = '2px solid #e11d48';
+                missingNames.push(`Dokumen ${idx + 1}`);
+            } else {
+                input.style.border = '1px solid #cbd5e1';
+            }
+        });
+
+        if (!allFilled) {
+            e.preventDefault();
+            alert('⚠️ PENGIRIMAN DITOLAK SYSTEM:\n\n' + missingNames.join(', ') + ' wajib diunggah!\nSilakan pilih file dokumen PDF / JPG terlebih dahulu sebelum mengirim permohonan.');
+            return false;
+        }
+        return true;
     }
 
     // ============================================================
