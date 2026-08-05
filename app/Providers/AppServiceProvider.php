@@ -21,12 +21,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        URL::forceScheme('https');
+        // Hanya paksa HTTPS jika di luar environment local (seperti di server hosting)
+        if (config('app.env') !== 'local') {
+            URL::forceScheme('https');
 
-        // Otomatis redirect HTTP ke HTTPS jika diakses via HTTP di server Railway
-        if (request()->header('x-forwarded-proto') === 'http') {
-            header('Location: https://' . request()->getHttpHost() . request()->getRequestUri(), true, 301);
-            exit();
+            // Otomatis redirect HTTP ke HTTPS jika diakses via HTTP di server hosting
+            if (request()->header('x-forwarded-proto') === 'http') {
+                header('Location: https://' . request()->getHttpHost() . request()->getRequestUri(), true, 301);
+                exit();
+            }
         }
     }
 }
