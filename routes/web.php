@@ -8,21 +8,19 @@ use App\Http\Controllers\AuthController;
 // ─── DEBUG ROUTE UNTUK DIAGNOSA RAILWAY ──────────────────────────────────
 Route::get('/test-db', function() {
     try {
-        \DB::connection()->getPdo();
         $userCount = \App\Models\User::count();
-        $users = \App\Models\User::all(['name', 'email', 'role']);
+        $users = \App\Models\User::all(['id', 'name', 'email', 'role']);
+        $tickets = \App\Models\Ticket::all(['id', 'ticket_code', 'service_name', 'status', 'assigned_to']);
+        $auth = \Illuminate\Support\Facades\Auth::user();
         return response()->json([
-            'status' => '✅ CONNECTED TO DATABASE SUCCESS!',
-            'database_name' => \DB::connection()->getDatabaseName(),
-            'driver' => \DB::connection()->getDriverName(),
+            'status' => '✅ DB DIAGNOSTIC',
+            'auth_user' => $auth,
             'user_count' => $userCount,
-            'users' => $users
+            'users' => $users,
+            'tickets' => $tickets
         ]);
     } catch (\Throwable $e) {
-        return response()->json([
-            'status' => '❌ DATABASE ERROR',
-            'error_message' => $e->getMessage()
-        ], 500);
+        return response()->json(['error' => $e->getMessage()], 500);
     }
 });
 

@@ -61,15 +61,19 @@ class TicketController extends Controller
 
         $user = \Illuminate\Support\Facades\Auth::user();
 
-        // Proteksi Ganda: Jika user adalah teknisi (Agus, Budi, Citra, Dian), WAKTU FILTER HANYA TIKET TERSEBUT
+        // Pengecekan nama teknisi secara eksplisit (100% Presisi)
         if ($user) {
-            $role = strtolower(trim($user->role));
-            if ($role === 'teknisi' || !in_array($role, ['super_admin', 'admin_aptika', 'kabid'])) {
-                $firstName = explode(' ', trim($user->name))[0]; // "Agus", "Budi", "Citra", "Dian"
-                $query->where(function ($q) use ($user, $firstName) {
-                    $q->where('assigned_to', '=', $user->name)
-                      ->orWhere('assigned_to', 'LIKE', '%' . $firstName . '%');
-                });
+            $nameLower = strtolower($user->name);
+            if (str_contains($nameLower, 'agus')) {
+                $query->where('assigned_to', 'LIKE', '%Agus%');
+            } elseif (str_contains($nameLower, 'budi')) {
+                $query->where('assigned_to', 'LIKE', '%Budi%');
+            } elseif (str_contains($nameLower, 'citra')) {
+                $query->where('assigned_to', 'LIKE', '%Citra%');
+            } elseif (str_contains($nameLower, 'dian')) {
+                $query->where('assigned_to', 'LIKE', '%Dian%');
+            } elseif (strtolower($user->role) === 'teknisi') {
+                $query->where('assigned_to', 'LIKE', '%' . explode(' ', $user->name)[0] . '%');
             }
         }
 
