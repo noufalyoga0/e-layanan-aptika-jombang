@@ -13,6 +13,13 @@
                 <p class="text-slate-500 text-xs">Lengkapi formulir dan unggah dokumen persyaratan sesuai jenis layanan yang dimohon</p>
             </div>
 
+            @if($errors->any())
+                <div class="alert alert-danger rounded-2xl text-xs py-3 px-4 mb-6 bg-rose-100 text-rose-900 border-0 font-semibold shadow-sm">
+                    <i class="fa-solid fa-circle-exclamation me-1.5 text-rose-600"></i>
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
             <form action="{{ route('pengajuan.store', [], false) }}" method="POST" enctype="multipart/form-data">
                 @csrf
 

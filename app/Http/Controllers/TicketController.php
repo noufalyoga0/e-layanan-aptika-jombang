@@ -98,6 +98,10 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
+        if (!$request->hasFile('doc_0')) {
+            return back()->withErrors(['doc_0' => '❌ Dokumen persyaratan wajib belum diunggah! Harap pilih dan lampirkan berkas dokumen permohonan.'])->withInput();
+        }
+
         $request->validate([
             'service_type' => 'required|string',
             'subdomain'    => 'required|string|max:255',
