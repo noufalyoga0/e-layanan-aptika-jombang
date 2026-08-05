@@ -14,12 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
 
-        $middleware->append(function (Request $request, Closure $next) {
-            $response = $next($request);
-            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-            return $response;
-        });
-
         $middleware->alias([
             'role'  => \App\Http\Middleware\CheckRole::class,
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
