@@ -62,7 +62,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body p-6">
-                                        <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl mb-4 text-xs">
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl mb-4 text-xs">
                                             <div>
                                                 <p class="mb-1 text-slate-500">Instansi Pemohon:</p>
                                                 <p class="font-bold text-slate-900 mb-2">{{ $t['opd_name'] }}</p>

@@ -32,7 +32,7 @@
     </div>
 
     <!-- Ringkasan Statistik Sistem -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div class="card border-0 shadow-sm rounded-2xl p-5 bg-white border-l-4 border-blue-900">
             <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Total Permohonan</span>
             <span class="text-3xl font-extrabold text-blue-950">{{ $stats['total_tickets'] }}</span>
