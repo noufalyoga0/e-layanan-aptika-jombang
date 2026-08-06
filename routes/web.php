@@ -133,8 +133,8 @@ Route::middleware('auth')->group(function () {
     // Reset data demo
     Route::get('/reset-demo', [TicketController::class, 'resetDemo'])->name('reset.demo');
 
-    // ── Admin OPD: Buat Pengajuan ─────────────────────────────────────────
-    Route::middleware('role:opd,admin_aptika')->group(function () {
+    // ── Admin OPD: Buat Pengajuan (verifikator tidak boleh mengajukan) ───
+    Route::middleware('role:opd,super_admin')->group(function () {
         Route::get('/pengajuan', [LayananController::class, 'pengajuanForm'])->name('pengajuan.form');
         Route::post('/pengajuan', [TicketController::class, 'store'])->name('pengajuan.store');
     });

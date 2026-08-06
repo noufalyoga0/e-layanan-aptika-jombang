@@ -105,8 +105,8 @@
                 @auth
                     @php $role = Auth::user()->role; @endphp
 
-                    {{-- OPD & Admin APTIKA: Buat Pengajuan --}}
-                    @if(in_array($role, ['opd', 'admin_aptika']))
+                    {{-- OPD & Super Admin: Buat Pengajuan (verifikator tidak boleh) --}}
+                    @if(in_array($role, ['opd', 'super_admin']))
                         <a href="{{ route('pengajuan.form') }}"
                            style="display:inline-flex; align-items:center; gap:6px; padding:7px 13px; border-radius:8px; font-size:0.85rem; font-weight:600; text-decoration:none; color:{{ request()->routeIs('pengajuan.form') ? '#065f46' : '#059669' }}; background:{{ request()->routeIs('pengajuan.form') ? '#d1fae5' : 'transparent' }};">
                             <i class="fa-solid fa-plus-circle" style="font-size:0.8rem;"></i> Buat Pengajuan
