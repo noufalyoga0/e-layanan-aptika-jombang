@@ -63,13 +63,6 @@
                         <i class="fa-solid fa-building me-1 text-slate-500"></i> {{ Auth::user()->opd_name }}
                     </span>
                 @endauth
-
-                {{-- Reset Data Demo Link --}}
-                <a href="{{ route('reset.demo') }}"
-                   onclick="return confirm('Reset semua data tiket database ke kondisi awal demo? All changes will be re-seeded.')"
-                   class="px-2.5 py-0.5 rounded-full bg-amber-600/30 hover:bg-amber-600 text-amber-300 hover:text-white transition font-semibold border border-amber-500/50 flex items-center gap-1 text-3xs">
-                    <i class="fa-solid fa-rotate-left"></i> Reset DB Demo
-                </a>
             </div>
         </div>
     </div>
