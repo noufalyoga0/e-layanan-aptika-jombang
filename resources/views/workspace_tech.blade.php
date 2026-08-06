@@ -90,7 +90,8 @@
                             </div>
                         @endif
 
-                        <!-- Tombol Selesai → buka modal -->
+                        <!-- Tombol Selesai → hanya untuk teknisi -->
+                        @if(Auth::user()->role === 'teknisi' || Auth::user()->role === 'super_admin')
                         <button
                             type="button"
                             class="btn w-100 font-bold text-sm py-2.5 rounded-xl border-0 bg-blue-900 hover:bg-blue-800 text-white shadow"
@@ -98,12 +99,18 @@
                             data-bs-target="#modal-selesai-{{ $loop->index }}">
                             <i class="fa-solid fa-circle-check me-1"></i> Tandai Selesai & Terbitkan BAST
                         </button>
+                        @else
+                        <div class="text-center text-xs text-slate-400 py-2 bg-slate-50 rounded-xl">
+                            <i class="fa-solid fa-eye me-1"></i> Hanya teknisi yang dapat menandai selesai
+                        </div>
+                        @endif
                     </div>
                 </div>
 
                 {{-- ============================================================
-                     MODAL: Isi Hasil Pengerjaan Teknisi
+                     MODAL: Isi Hasil Pengerjaan Teknisi (hanya untuk teknisi)
                 ============================================================ --}}
+                @if(Auth::user()->role === 'teknisi' || Auth::user()->role === 'super_admin')
                 <div class="modal fade" id="modal-selesai-{{ $loop->index }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content rounded-3xl border-0 shadow-xl overflow-hidden">
@@ -154,6 +161,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
             @endforeach
         </div>

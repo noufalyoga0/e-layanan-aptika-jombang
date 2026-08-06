@@ -147,8 +147,11 @@ Route::middleware('auth')->group(function () {
     });
 
     // ── Staf Teknisi ──────────────────────────────────────────────────────
+    // Verifikator APTIKA boleh lihat workspace, tapi TIDAK boleh tandai selesai
     Route::middleware('role:teknisi,admin_aptika')->group(function () {
         Route::get('/workspace-tech', [TicketController::class, 'workspaceTech'])->name('workspace.tech');
+    });
+    Route::middleware('role:teknisi')->group(function () {
         Route::post('/workspace-tech/{ticketId}/selesai', [TicketController::class, 'selesai'])->name('workspace.selesai');
     });
 
