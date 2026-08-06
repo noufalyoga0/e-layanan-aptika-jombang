@@ -35,7 +35,7 @@
                     <label class="form-check-label text-slate-600 font-medium">
                         <input type="checkbox" name="remember" class="form-check-input me-1 rounded"> Ingat Saya
                     </label>
-                    <a href="#" class="text-blue-900 font-bold hover:underline">Lupa Password?</a>
+                    <a href="#" class="text-blue-900 font-bold hover:underline" data-bs-toggle="tooltip" title="Hubungi Super Admin Diskominfo untuk reset password Anda.">Lupa Password?</a>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 bg-blue-900 hover:bg-blue-800 text-white font-bold text-sm py-2.5 rounded-xl border-0 shadow">
@@ -45,6 +45,11 @@
 
             <div class="mt-6 pt-6 border-top text-center text-xs text-slate-500">
                 Belum punya akun OPD? <a href="{{ route('register') }}" class="font-bold text-emerald-600 hover:underline">Daftar Akun Dinas Baru</a>
+            </div>
+
+            <div class="mt-3 p-3 rounded-xl bg-blue-50 border border-blue-100 text-xs text-blue-700 text-center">
+                <i class="fa-solid fa-circle-info me-1 text-blue-400"></i>
+                Lupa password? Hubungi <strong>Super Admin Diskominfo</strong> untuk reset akun Anda.
             </div>
         </div>
     </div>
