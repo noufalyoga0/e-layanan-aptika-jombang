@@ -127,8 +127,8 @@
                         </a>
                     @endif
 
-                    {{-- Hanya Teknisi & Admin APTIKA --}}
-                    @if(in_array($role, ['teknisi', 'admin_aptika']))
+                    {{-- Hanya Teknisi (bukan admin_aptika) --}}
+                    @if(in_array($role, ['teknisi', 'super_admin']))
                         <a href="{{ route('workspace.tech') }}"
                            style="display:inline-flex; align-items:center; gap:6px; padding:7px 13px; border-radius:8px; font-size:0.85rem; font-weight:600; text-decoration:none; color:{{ request()->routeIs('workspace.tech') ? '#155e75' : '#0891b2' }}; background:{{ request()->routeIs('workspace.tech') ? '#e0f2fe' : 'transparent' }};">
                             <i class="fa-solid fa-sliders" style="font-size:0.8rem;"></i> Workspace Teknisi
