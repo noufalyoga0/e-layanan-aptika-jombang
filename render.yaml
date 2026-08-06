@@ -1,0 +1,42 @@
+# Deploy gratis di Render: https://render.com
+# Dashboard → New → Blueprint → connect repo → pilih file render.yaml ini
+
+services:
+  - type: web
+    name: e-layanan-aptika-jombang
+    runtime: docker
+    plan: free
+    healthCheckPath: /up
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_NAME
+        value: E-Layanan APTIKA Jombang
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: FILESYSTEM_DISK
+        value: public
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aptika-db
+          property: connectionString
+
+databases:
+  - name: aptika-db
+    plan: free
+    databaseName: aptika_jombang
+    user: aptika

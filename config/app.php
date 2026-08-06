@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://e-layanan-aptika-jombang-production.up.railway.app'),
+    'url' => env('APP_URL', env('RENDER_EXTERNAL_URL', env('RAILWAY_PUBLIC_DOMAIN') ? 'https://'.env('RAILWAY_PUBLIC_DOMAIN') : 'http://localhost')),
 
     /*
     |--------------------------------------------------------------------------

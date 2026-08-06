@@ -1,21 +1,9 @@
 #!/bin/bash
-# Railway Build Script for Laravel E-Layanan APTIKA Jombang
+# Railway build script — jangan generate APP_KEY di sini (pakai env var Railway)
+
+set -e
 
 echo "=== Installing PHP dependencies ==="
 composer install --no-dev --optimize-autoloader
 
-echo "=== Generating App Key ==="
-php artisan key:generate --force
-
-echo "=== Running database migrations ==="
-php artisan migrate --force
-
-echo "=== Seeding database with demo data ==="
-php artisan db:seed --force
-
-echo "=== Caching config, routes, and views ==="
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-echo "=== Build complete! ==="
+echo "=== Build complete (migrate runs on start) ==="

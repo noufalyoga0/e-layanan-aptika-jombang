@@ -51,9 +51,28 @@
                             <p class="text-slate-700"><span class="font-bold text-slate-500">Tanggal Masuk:</span> {{ $t['created_at'] }}</p>
                             <p class="text-slate-700"><span class="font-bold text-slate-500">Detail Target:</span> {{ $t['detail_target'] }}</p>
                             <p class="text-slate-700"><span class="font-bold text-slate-500">Catatan OPD:</span> {{ $t['notes'] }}</p>
-                            <p class="text-emerald-700 font-bold pt-1">
-                                <i class="fa-solid fa-file-pdf me-1 text-rose-500"></i> Surat Permohonan Kadin — Terlampir ✓
-                            </p>
+                            <div class="pt-2 border-t border-slate-200 mt-2">
+                                <p class="font-bold text-slate-500 mb-2">Dokumen Persyaratan:</p>
+                                @if(!empty($t['attachments']))
+                                    <div class="space-y-1.5">
+                                        @foreach($t['attachments'] as $idx => $doc)
+                                            <a href="{{ route('tickets.document', [$t['id'], $idx], false) }}"
+                                               target="_blank"
+                                               class="inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-900 font-semibold hover:underline">
+                                                <i class="fa-solid {{ str_contains($doc['mime'] ?? '', 'pdf') ? 'fa-file-pdf text-rose-500' : 'fa-file-image text-sky-500' }}"></i>
+                                                {{ $doc['label'] ?? ('Dokumen ' . ($idx + 1)) }}
+                                                <span class="text-3xs text-slate-400 font-normal">({{ $doc['original_name'] ?? 'file' }})</span>
+                                                <i class="fa-solid fa-arrow-up-right-from-square text-3xs"></i>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <p class="text-amber-700 font-semibold mb-0">
+                                        <i class="fa-solid fa-triangle-exclamation me-1"></i>
+                                        Tidak ada dokumen tersimpan (pengajuan lama / data demo).
+                                    </p>
+                                @endif
+                            </div>
                         </div>
 
                         <!-- Action Buttons -->

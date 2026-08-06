@@ -16,10 +16,18 @@ class Ticket extends Model
         'status',
         'priority',
         'notes',
+        'attachments',
         'assigned_to',
         'disp_notes',
         'tech_result',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'attachments' => 'array',
+        ];
+    }
 
     public function logs(): HasMany
     {

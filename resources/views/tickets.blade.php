@@ -77,6 +77,24 @@
                                             </div>
                                         </div>
 
+                                        @if(!empty($t['attachments']))
+                                            <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl mb-4">
+                                                <h6 class="font-bold text-amber-900 text-xs mb-2">
+                                                    <i class="fa-solid fa-paperclip me-1"></i> Dokumen Persyaratan Terlampir
+                                                </h6>
+                                                <div class="space-y-1.5">
+                                                    @foreach($t['attachments'] as $idx => $doc)
+                                                        <a href="{{ route('tickets.document', [$t['id'], $idx], false) }}"
+                                                           target="_blank"
+                                                           class="inline-flex items-center gap-2 text-xs text-emerald-700 hover:text-emerald-900 font-semibold hover:underline">
+                                                            <i class="fa-solid {{ str_contains($doc['mime'] ?? '', 'pdf') ? 'fa-file-pdf text-rose-500' : 'fa-file-image text-sky-500' }}"></i>
+                                                            {{ $doc['label'] ?? ('Dokumen ' . ($idx + 1)) }}
+                                                        </a>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
+
                                         @if($t['tech_result'] !== '-')
                                             <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl mb-4">
                                                 <h6 class="font-bold text-emerald-900 text-xs mb-1"><i class="fa-solid fa-key me-1"></i> Hasil Pengerjaan Teknisi:</h6>

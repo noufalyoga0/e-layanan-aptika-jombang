@@ -225,5 +225,51 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    (function () {
+        function bindNumericOnly(input) {
+            if (input.dataset.numericBound) return;
+            input.dataset.numericBound = '1';
+
+            input.addEventListener('input', function () {
+                if (!this.hasAttribute('data-numeric-only')) return;
+                this.value = this.value.replace(/\D/g, '');
+            });
+
+            input.addEventListener('paste', function (e) {
+                if (!this.hasAttribute('data-numeric-only')) return;
+                e.preventDefault();
+                var text = (e.clipboardData || window.clipboardData).getData('text') || '';
+                this.value = (this.value + text).replace(/\D/g, '');
+            });
+        }
+
+        function setNumericMode(input, enabled) {
+            if (enabled) {
+                input.setAttribute('data-numeric-only', '');
+                input.setAttribute('inputmode', 'numeric');
+                input.setAttribute('pattern', '[0-9]*');
+                bindNumericOnly(input);
+            } else {
+                input.removeAttribute('data-numeric-only');
+                input.removeAttribute('inputmode');
+                input.removeAttribute('pattern');
+            }
+        }
+
+        function initNumericInputs(root) {
+            (root || document).querySelectorAll('[data-numeric-only]').forEach(bindNumericOnly);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initNumericInputs();
+        });
+
+        window.bindNumericOnly = bindNumericOnly;
+        window.setNumericMode = setNumericMode;
+        window.initNumericInputs = initNumericInputs;
+    })();
+    </script>
 </body>
 </html>

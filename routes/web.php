@@ -127,6 +127,7 @@ Route::middleware('auth')->group(function () {
     // Lacak tiket & cetak BAST (semua role boleh lihat)
     Route::get('/tiket', [TicketController::class, 'index'])->name('tickets.index');
     Route::get('/tiket/{ticketCode}/bast', [TicketController::class, 'printBast'])->name('tickets.bast');
+    Route::get('/tiket/{ticketCode}/dokumen/{index}', [TicketController::class, 'viewDocument'])->name('tickets.document');
     Route::get('/analytics', [LayananController::class, 'analytics'])->name('analytics');
 
     // Reset data demo

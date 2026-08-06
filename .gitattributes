@@ -1,11 +1,11 @@
-* text=auto eol=lf
+* text=auto
 
-*.blade.php diff=html
-*.css diff=css
-*.html diff=html
-*.md diff=markdown
-*.php diff=php
+*.css linguist-vendored
+*.scss linguist-vendored
+*.js linguist-vendored
+*.blade.php linguist-vendored
+*.sh text eol=lf
+docker/start.sh text eol=lf
 
-/.github export-ignore
 CHANGELOG.md export-ignore
-.styleci.yml export-ignore
+README.md export-ignore

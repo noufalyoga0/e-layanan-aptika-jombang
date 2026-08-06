@@ -17,6 +17,9 @@
                 <div class="alert alert-danger rounded-2xl text-xs py-3 px-4 mb-6 bg-rose-100 text-rose-900 border-0 font-semibold shadow-sm">
                     <i class="fa-solid fa-circle-exclamation me-1.5 text-rose-600"></i>
                     {{ $errors->first() }}
+                    @if($errors->has('doc_0') || $errors->has('doc_1') || $errors->has('doc_2'))
+                        <span class="block mt-1 font-normal text-rose-800">Data formulir tetap tersimpan. File dokumen perlu dipilih ulang karena batasan keamanan browser.</span>
+                    @endif
                 </div>
             @endif
 
@@ -33,11 +36,14 @@
                 {{-- Kategori Layanan --}}
                 <div class="mb-4">
                     <label class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider">Kategori Layanan</label>
+                    @php
+                        $selectedService = old('service_type', request('service', 'subdomain_hosting'));
+                    @endphp
                     <select name="service_type" id="service_type" class="form-select rounded-xl py-2.5 px-3 text-sm" required>
-                        <option value="subdomain_hosting"   {{ request('service') === 'subdomain_hosting' ? 'selected' : '' }}>Subdomain & Hosting VPS (*.jombangkab.go.id)</option>
-                        <option value="tte_bsre"            {{ request('service') === 'tte_bsre'          ? 'selected' : '' }}>Sertifikat Elektronik / TTE (BSRE BSSN)</option>
-                        <option value="integrasi_api"       {{ request('service') === 'integrasi_api'     ? 'selected' : '' }}>Integrasi API & SPLP Data Warehouse Jombang</option>
-                        <option value="helpdesk_it"         {{ request('service') === 'helpdesk_it'       ? 'selected' : '' }}>Helpdesk & Trouble Ticket IT Support</option>
+                        <option value="subdomain_hosting"   {{ $selectedService === 'subdomain_hosting' ? 'selected' : '' }}>Subdomain & Hosting VPS (*.jombangkab.go.id)</option>
+                        <option value="tte_bsre"            {{ $selectedService === 'tte_bsre'          ? 'selected' : '' }}>Sertifikat Elektronik / TTE (BSRE BSSN)</option>
+                        <option value="integrasi_api"       {{ $selectedService === 'integrasi_api'     ? 'selected' : '' }}>Integrasi API & SPLP Data Warehouse Jombang</option>
+                        <option value="helpdesk_it"         {{ $selectedService === 'helpdesk_it'       ? 'selected' : '' }}>Helpdesk & Trouble Ticket IT Support</option>
                     </select>
                 </div>
 
@@ -45,6 +51,7 @@
                 <div class="mb-4">
                     <label id="detail_label" class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider">Detail Kebutuhan</label>
                     <input type="text" name="subdomain" id="detail_input" class="form-control rounded-xl py-2.5 px-3 text-sm"
+                           value="{{ old('subdomain') }}"
                            placeholder="Contoh: posyandu.jombangkab.go.id" required>
                 </div>
 
@@ -52,7 +59,7 @@
                 <div class="mb-5">
                     <label class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider">Catatan Tambahan & Latar Belakang</label>
                     <textarea name="notes" rows="3" class="form-control rounded-xl p-3 text-sm"
-                              placeholder="Tuliskan latar belakang pengajuan atau rincian kebutuhan spesifik..."></textarea>
+                              placeholder="Tuliskan latar belakang pengajuan atau rincian kebutuhan spesifik...">{{ old('notes') }}</textarea>
                 </div>
 
                 {{-- ================================================================
@@ -83,6 +90,10 @@
     </div>
 
     <script>
+    const ALLOWED_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png'];
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+    const FILE_ACCEPT = '.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png';
+
     // ============================================================
     // DATA DOKUMEN PER LAYANAN (sesuai Katalog)
     // ============================================================
@@ -97,7 +108,8 @@
         },
         tte_bsre: {
             detailLabel:  'NIP Pejabat ASN Pemohon TTE',
-            detailHolder: 'Contoh: 19801115 200501 1 002',
+            detailHolder: 'Contoh: 198011152005011002',
+            numericOnly: true,
             docs: [
                 { label: 'Surat Rekomendasi OPD (PDF)',           icon: 'fa-file-pdf',  hint: 'Dari Kepala OPD yang merekomendasikan pejabat tersebut' },
                 { label: 'Scan KTP ASN (JPG / PNG)',              icon: 'fa-id-card',   hint: 'Foto KTP yang jelas dan terbaca' },
@@ -122,31 +134,140 @@
         }
     };
 
+    function getFileExtension(filename) {
+        const parts = filename.split('.');
+        return parts.length > 1 ? parts.pop().toLowerCase() : '';
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes >= 1024 * 1024) {
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+        return Math.max(1, Math.round(bytes / 1024)) + ' KB';
+    }
+
+    function setFileInputState(input, state, message = '') {
+        const box = input.closest('.doc-upload-box');
+        const errorEl = box.querySelector('.file-error');
+        const okEl = box.querySelector('.file-ok');
+
+        input.classList.remove('border-rose-500', 'border-emerald-500', 'border-slate-200');
+        errorEl.classList.add('hidden');
+        okEl.classList.add('hidden');
+        errorEl.textContent = '';
+
+        if (state === 'error') {
+            input.classList.add('border-rose-500');
+            errorEl.textContent = message;
+            errorEl.classList.remove('hidden');
+        } else if (state === 'ok') {
+            input.classList.add('border-emerald-500');
+            okEl.textContent = message;
+            okEl.classList.remove('hidden');
+        } else {
+            input.classList.add('border-slate-200');
+        }
+    }
+
+    function validateSingleFile(input, showSuccess = true) {
+        if (!input.files || input.files.length === 0) {
+            setFileInputState(input, 'neutral');
+            return { valid: false, empty: true };
+        }
+
+        const file = input.files[0];
+        const ext = getFileExtension(file.name);
+
+        if (!ALLOWED_EXTENSIONS.includes(ext)) {
+            input.value = '';
+            setFileInputState(
+                input,
+                'error',
+                `Format "${ext || 'tidak dikenal'}" tidak didukung. Gunakan PDF, JPG, JPEG, atau PNG.`
+            );
+            return { valid: false, empty: true };
+        }
+
+        if (file.size > MAX_FILE_SIZE) {
+            input.value = '';
+            setFileInputState(
+                input,
+                'error',
+                `Ukuran file ${formatFileSize(file.size)} melebihi batas maksimal 5 MB.`
+            );
+            return { valid: false, empty: true };
+        }
+
+        if (showSuccess) {
+            setFileInputState(
+                input,
+                'ok',
+                `✓ ${file.name} (${formatFileSize(file.size)}) siap diunggah.`
+            );
+        } else {
+            setFileInputState(input, 'neutral');
+        }
+
+        return { valid: true, empty: false, file };
+    }
+
+    function attachFileValidators() {
+        document.querySelectorAll('#docs_container input[type="file"]').forEach(input => {
+            input.addEventListener('change', () => validateSingleFile(input));
+        });
+    }
+
     // ============================================================
     // FUNGSI RENDER DOKUMEN UPLOAD
     // ============================================================
-    function renderDocs(serviceType) {
+    function renderDocs(serviceType, resetDetail = false) {
         const config  = layananConfig[serviceType];
         const container = document.getElementById('docs_container');
         const detailLabel  = document.getElementById('detail_label');
         const detailInput  = document.getElementById('detail_input');
 
-        // Update label & placeholder field detail
         detailLabel.textContent  = config.detailLabel;
         detailInput.placeholder  = config.detailHolder;
+        if (resetDetail) {
+            detailInput.value = '';
+        }
 
-        // Render upload field per dokumen
+        if (config.numericOnly) {
+            if (typeof setNumericMode === 'function') {
+                setNumericMode(detailInput, true);
+            } else {
+                detailInput.setAttribute('data-numeric-only', '');
+                detailInput.setAttribute('inputmode', 'numeric');
+                detailInput.setAttribute('pattern', '[0-9]*');
+            }
+        } else if (typeof setNumericMode === 'function') {
+            setNumericMode(detailInput, false);
+        } else {
+            detailInput.removeAttribute('data-numeric-only');
+            detailInput.removeAttribute('inputmode');
+            detailInput.removeAttribute('pattern');
+        }
+
         container.innerHTML = config.docs.map((doc, idx) => `
-            <div class="bg-white rounded-xl border border-amber-200 p-3">
+            <div class="doc-upload-box bg-white rounded-xl border border-amber-200 p-3">
                 <div class="flex items-center gap-2 mb-1.5">
                     <i class="fa-solid ${doc.icon} text-amber-600 text-sm"></i>
                     <span class="text-xs font-bold text-slate-800">${idx + 1}. ${doc.label}</span>
                     <span class="ms-auto text-3xs text-rose-600 font-bold">WAJIB</span>
                 </div>
                 <p class="text-3xs text-slate-500 mb-2">${doc.hint}</p>
-                <input type="file" name="doc_${idx}" id="doc_input_${idx}" class="form-control form-control-sm rounded-lg text-xs border-slate-200" required>
+                <input type="file"
+                       name="doc_${idx}"
+                       id="doc_input_${idx}"
+                       class="form-control form-control-sm rounded-lg text-xs border-slate-200"
+                       accept="${FILE_ACCEPT}"
+                       required>
+                <p class="file-error hidden text-3xs text-rose-600 font-semibold mt-2"></p>
+                <p class="file-ok hidden text-3xs text-emerald-700 font-semibold mt-2"></p>
             </div>
         `).join('');
+
+        attachFileValidators();
     }
 
     // ============================================================
@@ -154,24 +275,35 @@
     // ============================================================
     function validateFiles(e) {
         const fileInputs = document.querySelectorAll('#docs_container input[type="file"]');
-        let allFilled = true;
-        let missingNames = [];
+        let canSubmit = true;
+        let firstErrorBox = null;
 
         fileInputs.forEach((input, idx) => {
-            if (!input.files || input.files.length === 0) {
-                allFilled = false;
-                input.style.border = '2px solid #e11d48';
-                missingNames.push(`Dokumen ${idx + 1}`);
-            } else {
-                input.style.border = '1px solid #cbd5e1';
+            const result = validateSingleFile(input, true);
+            const docLabel = layananConfig[selectEl.value]?.docs[idx]?.label || `Dokumen ${idx + 1}`;
+
+            if (result.empty) {
+                canSubmit = false;
+                if (!firstErrorBox) {
+                    firstErrorBox = input.closest('.doc-upload-box');
+                }
+                if (!input.files || input.files.length === 0) {
+                    setFileInputState(input, 'error', `"${docLabel}" wajib diunggah.`);
+                }
+            } else if (!result.valid) {
+                canSubmit = false;
+                if (!firstErrorBox) {
+                    firstErrorBox = input.closest('.doc-upload-box');
+                }
             }
         });
 
-        if (!allFilled) {
+        if (!canSubmit) {
             e.preventDefault();
-            alert('⚠️ PENGIRIMAN DITOLAK SYSTEM:\n\n' + missingNames.join(', ') + ' wajib diunggah!\nSilakan pilih file dokumen PDF / JPG terlebih dahulu sebelum mengirim permohonan.');
+            firstErrorBox?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return false;
         }
+
         return true;
     }
 
@@ -179,9 +311,9 @@
     // EVENT LISTENER — Jalankan setiap ganti dropdown
     // ============================================================
     const selectEl = document.getElementById('service_type');
-    selectEl.addEventListener('change', () => renderDocs(selectEl.value));
 
-    // Jalankan saat halaman pertama kali dimuat
-    renderDocs(selectEl.value);
+    selectEl.addEventListener('change', () => renderDocs(selectEl.value, true));
+
+    document.addEventListener('DOMContentLoaded', () => renderDocs(selectEl.value, false));
     </script>
 @endsection

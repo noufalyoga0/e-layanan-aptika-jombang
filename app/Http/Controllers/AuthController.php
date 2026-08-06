@@ -52,9 +52,11 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
             'opd_name' => 'required|string|max:255',
-            'nip'      => 'required|string|max:30',
+            'nip'      => 'required|regex:/^\d+$/|max:30',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+        ], [
+            'nip.regex' => 'NIP hanya boleh berisi angka, tanpa huruf atau spasi.',
         ]);
 
         $user = User::create([

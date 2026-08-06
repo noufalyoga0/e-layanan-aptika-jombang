@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\TicketLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
@@ -32,6 +34,7 @@ class TicketController extends Controller
                 $l['time'] = date('Y-m-d H:i', strtotime($l['created_at']));
                 return $l;
             }, $t['logs'] ?? []);
+            $t['attachments'] = $t['attachments'] ?? [];
             return $t;
         }, $tickets);
 
@@ -49,6 +52,7 @@ class TicketController extends Controller
         $pendingTickets = array_map(function ($t) {
             $t['id'] = $t['ticket_code'];
             $t['created_at'] = date('Y-m-d H:i', strtotime($t['created_at']));
+            $t['attachments'] = $t['attachments'] ?? [];
             return $t;
         }, $pendingTickets);
 
@@ -86,6 +90,7 @@ class TicketController extends Controller
                 $l['time'] = date('Y-m-d H:i', strtotime($l['created_at']));
                 return $l;
             }, $t['logs'] ?? []);
+            $t['attachments'] = $t['attachments'] ?? [];
             return $t;
         }, $techTickets);
 
@@ -98,22 +103,40 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
-        if (!$request->hasFile('doc_0')) {
-            return back()->withErrors(['doc_0' => '❌ Dokumen persyaratan wajib belum diunggah! Harap pilih dan lampirkan berkas dokumen permohonan.'])->withInput();
+        $serviceId = $request->input('service_type');
+        $docLabels = $this->docLabelsForService($serviceId);
+
+        if (empty($docLabels)) {
+            return back()->withErrors(['service_type' => 'Jenis layanan tidak valid.'])->withInput();
         }
 
-        $request->validate([
+        $rules = [
             'service_type' => 'required|string',
             'subdomain'    => 'required|string|max:255',
             'notes'        => 'nullable|string|max:1000',
-            'doc_0'        => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        ], [
+        ];
+
+        if ($serviceId === 'tte_bsre') {
+            $rules['subdomain'] = 'required|regex:/^\d+$/|max:30';
+        }
+
+        foreach (array_keys($docLabels) as $key) {
+            $rules[$key] = 'required|file|mimes:pdf,jpg,jpeg,png|max:5120';
+        }
+
+        $messages = [
             'subdomain.required' => 'Detail kebutuhan permohonan wajib diisi!',
-            'doc_0.required'     => 'Dokumen persyaratan wajib belum diunggah! Harap sertakan file dokumen permohonan.',
-            'doc_0.file'         => 'Dokumen persyaratan harus berupa file valid.',
-            'doc_0.mimes'        => 'Dokumen harus berformat PDF, JPG, JPEG, atau PNG.',
-            'doc_0.max'          => 'Ukuran file dokumen maksimal 5MB.',
-        ]);
+            'subdomain.regex'    => 'NIP hanya boleh berisi angka, tanpa huruf atau spasi.',
+        ];
+
+        foreach ($docLabels as $key => $label) {
+            $messages["{$key}.required"] = "{$label} wajib diunggah.";
+            $messages["{$key}.file"]     = "{$label} harus berupa file valid.";
+            $messages["{$key}.mimes"]    = "{$label} harus berformat PDF, JPG, JPEG, atau PNG.";
+            $messages["{$key}.max"]      = "{$label} maksimal 5 MB per file.";
+        }
+
+        $request->validate($rules, $messages);
 
         $count = Ticket::count();
         $newCode = 'REQ-JBG-' . date('Ym') . '-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
@@ -125,11 +148,21 @@ class TicketController extends Controller
             'helpdesk_it'       => 'Helpdesk & Trouble Ticket IT',
         ];
 
-        $serviceId = $request->input('service_type');
-
-        $opdName = \Illuminate\Support\Facades\Auth::check()
-            ? \Illuminate\Support\Facades\Auth::user()->opd_name
+        $opdName = Auth::check()
+            ? Auth::user()->opd_name
             : 'Dinas Kesehatan Kab. Jombang';
+
+        $attachments = [];
+        foreach ($docLabels as $key => $label) {
+            $file = $request->file($key);
+            $path = $file->store("ticket-docs/{$newCode}", 'public');
+            $attachments[] = [
+                'label'         => $label,
+                'path'          => $path,
+                'original_name' => $file->getClientOriginalName(),
+                'mime'          => $file->getMimeType(),
+            ];
+        }
 
         $ticket = Ticket::create([
             'ticket_code'   => $newCode,
@@ -140,6 +173,7 @@ class TicketController extends Controller
             'status'        => 'menunggu_verifikasi',
             'priority'      => 'Normal',
             'notes'         => $request->input('notes', 'Pengajuan via Portal E-Layanan APTIKA'),
+            'attachments'   => $attachments,
             'assigned_to'   => 'Belum Didisposisi',
         ]);
 
@@ -242,6 +276,70 @@ class TicketController extends Controller
     {
         $ticket = Ticket::where('ticket_code', $ticketCode)->firstOrFail();
         return view('bast_print', compact('ticket'));
+    }
+
+    public function viewDocument(string $ticketCode, int $index)
+    {
+        $ticket = Ticket::where('ticket_code', $ticketCode)->firstOrFail();
+        $this->authorizeDocumentAccess($ticket);
+
+        $attachments = $ticket->attachments ?? [];
+        if (!isset($attachments[$index])) {
+            abort(404, 'Dokumen tidak ditemukan.');
+        }
+
+        $doc = $attachments[$index];
+        if (!Storage::disk('public')->exists($doc['path'])) {
+            abort(404, 'Berkas dokumen tidak ditemukan di server.');
+        }
+
+        return Storage::disk('public')->response(
+            $doc['path'],
+            $doc['original_name'],
+            ['Content-Type' => $doc['mime'] ?? 'application/octet-stream']
+        );
+    }
+
+    private function authorizeDocumentAccess(Ticket $ticket): void
+    {
+        $user = Auth::user();
+        if (!$user) {
+            abort(403);
+        }
+
+        if (in_array($user->role, ['admin_aptika', 'teknisi', 'super_admin', 'kabid'], true)) {
+            return;
+        }
+
+        if ($user->role === 'opd' && $user->opd_name === $ticket->opd_name) {
+            return;
+        }
+
+        abort(403, 'Anda tidak memiliki akses untuk melihat dokumen ini.');
+    }
+
+    private function docLabelsForService(string $serviceId): array
+    {
+        return match ($serviceId) {
+            'subdomain_hosting' => [
+                'doc_0' => 'Surat Permohonan Resmi Kadin (PDF)',
+                'doc_1' => 'Form Spesifikasi Teknis Web / App',
+            ],
+            'tte_bsre' => [
+                'doc_0' => 'Surat Rekomendasi OPD (PDF)',
+                'doc_1' => 'Scan KTP ASN (JPG / PNG)',
+                'doc_2' => 'SK Jabatan Terakhir (PDF)',
+            ],
+            'integrasi_api' => [
+                'doc_0' => 'Surat Pengajuan Integrasi Data (PDF)',
+                'doc_1' => 'Dokumen Arsitektur API / Data Schema',
+            ],
+            'helpdesk_it' => [
+                'doc_0' => 'Screenshot Bukti Error / Kendala (JPG/PNG)',
+                'doc_1' => 'Form Laporan Gangguan (PDF)',
+            ],
+            default => [],
+        };
     }
 
     // -----------------------------------------------------------------------

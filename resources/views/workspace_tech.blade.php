@@ -64,6 +64,19 @@
                                     <strong>Instruksi Verifikator:</strong> {{ $t['disp_notes'] }}
                                 </p>
                             @endif
+                            @if(!empty($t['attachments']))
+                                <div class="pt-2 border-t border-slate-200 mt-2">
+                                    <p class="font-bold text-slate-500 mb-1.5">Dokumen Persyaratan:</p>
+                                    @foreach($t['attachments'] as $idx => $doc)
+                                        <a href="{{ route('tickets.document', [$t['id'], $idx], false) }}"
+                                           target="_blank"
+                                           class="inline-flex items-center gap-1.5 text-emerald-700 hover:text-emerald-900 font-semibold hover:underline mb-1">
+                                            <i class="fa-solid {{ str_contains($doc['mime'] ?? '', 'pdf') ? 'fa-file-pdf text-rose-500' : 'fa-file-image text-sky-500' }}"></i>
+                                            {{ $doc['label'] ?? ('Dokumen ' . ($idx + 1)) }}
+                                        </a><br>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
 
                         <!-- Progress log mini -->

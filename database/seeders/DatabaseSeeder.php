@@ -12,6 +12,10 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        if (User::query()->exists()) {
+            return;
+        }
+
         // 1. Seed Users (Roles Pemkab Jombang)
 
         // 🔑 SUPER ADMIN — Mahasiswa Magang UB

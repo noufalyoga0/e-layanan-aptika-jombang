@@ -110,7 +110,8 @@
                         </div>
                         <div>
                             <label class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider">NIP Pegawai</label>
-                            <input type="text" name="nip" class="form-control rounded-xl text-sm py-2" placeholder="1985xxxx 2010xx x xxx" required>
+                            <input type="text" name="nip" class="form-control rounded-xl text-sm py-2" placeholder="Contoh: 198011152005011002" inputmode="numeric" pattern="[0-9]*" data-numeric-only required>
+                            <p class="text-3xs text-slate-400 mt-1 mb-0">Hanya angka, tanpa spasi atau huruf.</p>
                         </div>
                         <div>
                             <label class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider">Role / Hak Akses</label>
