@@ -69,7 +69,7 @@
                                 @else
                                     <p class="text-amber-700 font-semibold mb-0">
                                         <i class="fa-solid fa-triangle-exclamation me-1"></i>
-                                        Tidak ada dokumen tersimpan (pengajuan lama / data demo).
+                                        Tidak ada dokumen tersimpan untuk pengajuan ini.
                                     </p>
                                 @endif
                             </div>

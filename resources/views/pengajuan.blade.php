@@ -69,7 +69,6 @@
                     <h4 class="font-bold text-sm text-amber-900 mb-3 flex items-center gap-2">
                         <i class="fa-solid fa-file-arrow-up text-amber-600"></i>
                         Dokumen Persyaratan Wajib
-                        <span id="docs_badge" class="ml-auto text-3xs font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">Simulasi Upload</span>
                     </h4>
                     <p class="text-xs text-amber-700 mb-4" id="docs_note">Unggah semua dokumen di bawah ini dalam format PDF / JPG / PNG (Max 5MB per file)</p>
 

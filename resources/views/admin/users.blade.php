@@ -128,7 +128,7 @@
                         </div>
                         <div>
                             <label class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider">Password</label>
-                            <input type="password" name="password" class="form-control rounded-xl text-sm py-2" placeholder="Minimal 6 karakter" value="password" required>
+                            <input type="password" name="password" class="form-control rounded-xl text-sm py-2" placeholder="Minimal 6 karakter" required>
                         </div>
                     </div>
                     <div class="modal-footer bg-slate-50 px-6 py-3">

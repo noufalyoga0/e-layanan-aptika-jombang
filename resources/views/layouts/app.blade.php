@@ -209,10 +209,10 @@
                 </div>
                 <div>
                     <p class="font-bold text-white mb-0">Diskominfo Kabupaten Jombang</p>
-                    <p class="text-xs text-slate-500 mb-0">Bidang Aplikasi dan Informatika (APTIKA) • Laravel 11 Edition</p>
+                    <p class="text-xs text-slate-500 mb-0">Bidang Aplikasi dan Informatika (APTIKA) • Diskominfo Kabupaten Jombang</p>
                 </div>
             </div>
-            <p class="text-xs text-slate-500 mb-0">© 2026 Pemkab Jombang. Proyek Magang D3 TI Universitas Brawijaya.</p>
+            <p class="text-xs text-slate-500 mb-0">© {{ date('Y') }} Pemerintah Kabupaten Jombang. Hak cipta dilindungi.</p>
         </div>
     </footer>
 

@@ -18,14 +18,14 @@ class DatabaseSeeder extends Seeder
 
         // 1. Seed Users (Roles Pemkab Jombang)
 
-        // 🔑 SUPER ADMIN — Mahasiswa Magang UB
+        // Super Admin
         User::create([
-            'name'     => 'Noufal Yoga Salsabila',
-            'email'    => 'noufalyoga0@student.ub.ac.id',
+            'name'     => 'Super Admin',
+            'email'    => 'admin@diskominfo.jombangkab.go.id',
             'password' => Hash::make('password'),
             'role'     => 'super_admin',
-            'opd_name' => 'Diskominfo Kab. Jombang (Mahasiswa Magang UB)',
-            'nip'      => '243140701111010',
+            'opd_name' => 'Diskominfo Kab. Jombang',
+            'nip'      => '198001012005011001',
         ]);
 
         // OPD Accounts (Dinas & Kecamatan Pemkab Jombang)

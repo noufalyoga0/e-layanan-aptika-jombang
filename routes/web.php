@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/workspace-tech/{ticketId}/selesai', [TicketController::class, 'selesai'])->name('workspace.selesai');
     });
 
-    // ── Super Admin (Mahasiswa Magang UB / System Developer) ─────────────
+    // ── Super Admin ───────────────────────────────────────────────────────
     Route::middleware('role:super_admin')->group(function () {
         Route::get('/admin/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/admin/users', [\App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Control Center Super Admin - Noufal Yoga Salsabila')
+@section('title', 'Dashboard Super Admin - E-Layanan APTIKA')
 
 @section('content')
     <div class="mb-6">
@@ -10,12 +10,11 @@
             </div>
             <div class="relative z-10">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold mb-3">
-                    <i class="fa-solid fa-shield-check"></i> System Creator & Super Admin Access
+                    <i class="fa-solid fa-shield-check"></i> Super Admin Access
                 </div>
-                <h1 class="text-3xl font-extrabold tracking-tight mb-2">Selamat Datang, Noufal Yoga Salsabila! 👋</h1>
+                <h1 class="text-3xl font-extrabold tracking-tight mb-2">Dashboard Super Admin</h1>
                 <p class="text-slate-300 text-sm max-w-2xl mb-4">
-                    NIM: <strong>243140701111010</strong> • D3 Teknologi Informasi, Universitas Brawijaya<br>
-                    Pengembang Utama Portal E-Layanan APTIKA Diskominfo Kabupaten Jombang.
+                    Panel kontrol penuh untuk manajemen sistem E-Layanan APTIKA Diskominfo Kabupaten Jombang.
                 </p>
                 <div class="flex flex-wrap gap-2 text-xs font-semibold">
                     <a href="{{ route('admin.users') }}" class="btn btn-emerald bg-emerald-600 hover:bg-emerald-500 border-0 text-white px-4 py-2 rounded-xl">
@@ -111,22 +110,22 @@
                 </div>
                 <div class="flex justify-between pb-2 border-b border-slate-800">
                     <span class="text-slate-400">Database Connection:</span>
-                    <span class="font-bold text-sky-400">MySQL Laragon (db_aptika_jombang)</span>
+                    <span class="font-bold text-sky-400">MySQL (Railway Production)</span>
                 </div>
                 <div class="flex justify-between pb-2 border-b border-slate-800">
                     <span class="text-slate-400">PHP Version:</span>
-                    <span class="font-bold text-slate-200">PHP 8.3.28</span>
+                    <span class="font-bold text-slate-200">PHP 8.3</span>
                 </div>
                 <div class="flex justify-between pb-2 border-b border-slate-800">
                     <span class="text-slate-400">Auth System:</span>
                     <span class="font-bold text-amber-400">Multi-Role Middleware</span>
                 </div>
                 <div class="flex justify-between pb-2 border-b border-slate-800">
-                    <span class="text-slate-400">Main Developer:</span>
-                    <span class="font-bold text-purple-300">Noufal Yoga Salsabila</span>
+                    <span class="text-slate-400">Environment:</span>
+                    <span class="font-bold text-emerald-300">Production</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Instansi Magang:</span>
+                    <span class="text-slate-400">Instansi:</span>
                     <span class="font-bold text-slate-200">Diskominfo Kab. Jombang</span>
                 </div>
             </div>

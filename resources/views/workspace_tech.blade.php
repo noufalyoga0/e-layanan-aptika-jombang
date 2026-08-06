@@ -145,7 +145,7 @@
 
                                     <div class="mt-3">
                                         <label class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider mb-1.5">
-                                            Upload Bukti/Dokumentasi (Simulasi)
+                                            Upload Bukti/Dokumentasi
                                         </label>
                                         <input type="file" class="form-control form-control-sm rounded-xl text-xs">
                                     </div>

@@ -26,10 +26,8 @@
                     Lacak Tiket
                 </button>
             </form>
-            <div class="text-xs text-slate-300 flex items-center gap-2 flex-wrap">
-                <span>Resi Contoh:</span>
-                <a href="{{ route('tickets.index') }}?search=REQ-JBG-202608-001" class="text-cyan-300 underline font-semibold">REQ-JBG-202608-001 (Hosting Dinkes)</a>
-                <a href="{{ route('tickets.index') }}?search=REQ-JBG-202608-002" class="text-cyan-300 underline font-semibold">REQ-JBG-202608-002 (TTE Disdik)</a>
+            <div class="text-xs text-slate-300">
+                <span class="opacity-70">Masukkan nomor resi tiket untuk melacak status pengajuan Anda.</span>
             </div>
         </div>
     </div>
