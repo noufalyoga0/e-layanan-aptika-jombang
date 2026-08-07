@@ -55,7 +55,7 @@
             font-weight: 600;
             text-decoration: none;
             color: #475569;
-            transition: background 0.15s;
+            transition: background 0.2s, color 0.2s;
             white-space: nowrap;
         }
         .nav-link-item:hover { background: #f1f5f9; color: #0f2c59; }
@@ -70,7 +70,7 @@
             font-weight: 600;
             text-decoration: none;
             color: #475569;
-            transition: background 0.15s;
+            transition: background 0.2s;
         }
         .mobile-nav-item:hover { background: #f1f5f9; color: #0f2c59; }
     </style>
@@ -367,9 +367,9 @@
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Hamburger menu toggle
         document.addEventListener('DOMContentLoaded', function () {
-            const btn = document.getElementById('nav-hamburger');
+            // ── Hamburger menu toggle ────────────────────────────────────
+            const btn  = document.getElementById('nav-hamburger');
             const menu = document.getElementById('mobile-menu');
             const icon = document.getElementById('hamburger-icon');
             if (btn && menu) {
@@ -379,7 +379,24 @@
                     icon.className = isOpen ? 'fa-solid fa-bars text-lg' : 'fa-solid fa-xmark text-lg';
                 });
             }
-            // Aktifkan semua Bootstrap tooltips
+
+            // ── Navbar blur on scroll ───────────────────────────────────
+            const nav = document.querySelector('nav');
+            if (nav) {
+                window.addEventListener('scroll', function () {
+                    if (window.scrollY > 10) {
+                        nav.style.backdropFilter = 'blur(12px)';
+                        nav.style.backgroundColor = 'rgba(255,255,255,0.92)';
+                        nav.style.boxShadow = '0 2px 20px rgba(15,44,89,0.10)';
+                    } else {
+                        nav.style.backdropFilter = '';
+                        nav.style.backgroundColor = '#fff';
+                        nav.style.boxShadow = '0 1px 4px rgba(0,0,0,0.05)';
+                    }
+                }, { passive: true });
+            }
+
+            // ── Bootstrap tooltips ──────────────────────────────────────
             document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
                 new bootstrap.Tooltip(el);
             });
