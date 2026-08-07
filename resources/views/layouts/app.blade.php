@@ -78,13 +78,12 @@
 <body class="bg-slate-50 text-slate-900 flex flex-col min-h-screen">
 
     <!-- Top Official Government Header Bar -->
-    <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+    <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800 hidden md:block">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
             <span class="font-semibold text-slate-300 flex items-center gap-2">
                 <i class="fa-solid fa-building-columns text-emerald-400"></i>
                 <span>Pemerintah Kabupaten Jombang • <strong>Diskominfo Bidang APTIKA</strong></span>
             </span>
-
             <div class="flex items-center gap-3">
                 @auth
                     <span class="text-slate-400 text-3xs font-mono">

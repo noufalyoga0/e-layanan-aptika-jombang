@@ -59,7 +59,7 @@
                                         default        => 'bg-emerald-100 text-emerald-900'
                                     } }}">
                                     {{ match($u->role) {
-                                        'super_admin'  => '🔑 Super Admin (Developer)',
+                                        'super_admin'  => '🔑 Super Admin',
                                         'admin_aptika' => '🛡️ Verifikator APTIKA',
                                         'teknisi'      => '💻 Staf Teknisi',
                                         'kabid'        => '📊 Kepala Bidang',

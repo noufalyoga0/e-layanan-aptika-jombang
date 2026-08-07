@@ -7,13 +7,65 @@
         <div class="d-flex justify-between items-center mb-6 flex-wrap gap-3">
             <div>
                 <h2 class="text-2xl font-extrabold text-blue-950 mb-1">Daftar Tiket Pengajuan Layanan</h2>
-                <p class="text-slate-500 text-xs mb-0">Monitoring progres permohonan dan linimasa penyelesaian layanan</p>
+                <p class="text-slate-500 text-xs mb-0">
+                    Monitoring progres permohonan dan linimasa penyelesaian layanan
+                    @if(count($tickets) > 0)
+                        <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold text-xs">
+                            {{ count($tickets) }} tiket
+                        </span>
+                    @endif
+                </p>
             </div>
-            <a href="{{ route('pengajuan.form') }}" class="btn btn-emerald bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl border-0 shadow">
-                <i class="fa-solid fa-plus me-1"></i> Buat Pengajuan Baru
-            </a>
+            @auth
+                @if(Auth::user()->role === 'opd')
+                    <a href="{{ route('pengajuan.form') }}" class="btn btn-emerald bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl border-0 shadow">
+                        <i class="fa-solid fa-plus me-1"></i> Buat Pengajuan Baru
+                    </a>
+                @endif
+            @endauth
         </div>
 
+        {{-- Search bar --}}
+        <form method="GET" action="{{ route('tickets.index', [], false) }}" class="mb-4">
+            <div class="flex gap-2">
+                <input type="text" name="search" value="{{ $search ?? '' }}"
+                    class="form-control rounded-xl text-sm py-2 px-3"
+                    placeholder="Cari nomor tiket atau nama instansi...">
+                <button type="submit" class="btn bg-blue-900 text-white rounded-xl text-xs font-bold px-4 border-0 flex-shrink-0">
+                    <i class="fa-solid fa-magnifying-glass me-1"></i> Cari
+                </button>
+                @if($search)
+                    <a href="{{ route('tickets.index', [], false) }}" class="btn btn-light rounded-xl text-xs font-bold px-3 flex-shrink-0">
+                        <i class="fa-solid fa-xmark me-1"></i> Reset
+                    </a>
+                @endif
+            </div>
+        </form>
+
+        @if(count($tickets) === 0)
+            <div class="text-center py-16">
+                <i class="fa-solid fa-ticket-simple text-5xl text-slate-200 mb-4"></i>
+                <h3 class="text-lg font-bold text-slate-500 mb-1">
+                    @if($search)
+                        Tidak ada tiket yang cocok dengan "{{ $search }}"
+                    @else
+                        Belum ada tiket pengajuan
+                    @endif
+                </h3>
+                <p class="text-slate-400 text-sm mb-4">
+                    @if($search)
+                        Coba kata kunci lain atau reset pencarian.
+                    @else
+                        Tiket akan muncul setelah OPD mengajukan permohonan layanan.
+                    @endif
+                </p>
+                @if($search)
+                    <a href="{{ route('tickets.index', [], false) }}" class="btn bg-blue-900 text-white rounded-xl text-xs font-bold px-4 py-2 border-0">
+                        <i class="fa-solid fa-xmark me-1"></i> Reset Pencarian
+                    </a>
+                @endif
+            </div>
+        @else
         <div class="table-responsive">
             <table class="table table-hover align-middle text-sm mb-0">
                 <thead class="table-light text-slate-600">
@@ -95,9 +147,9 @@
                                             </div>
                                         @endif
 
-                                        @if($t['tech_result'] !== '-')
+                                        @if(isset($t['tech_result']) && $t['tech_result'] && $t['tech_result'] !== '-')
                                             <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl mb-4">
-                                                <h6 class="font-bold text-emerald-900 text-xs mb-1"><i class="fa-solid fa-key me-1"></i> Hasil Pengerjaan Teknisi:</h6>
+                                                <h6 class="font-bold text-emerald-900 text-xs mb-1"><i class="fa-solid fa-screwdriver-wrench me-1"></i> Hasil Pengerjaan Teknisi:</h6>
                                                 <p class="text-xs text-emerald-800 mb-0 font-mono">{{ $t['tech_result'] }}</p>
                                             </div>
                                         @endif
@@ -135,5 +187,6 @@
                 </tbody>
             </table>
         </div>
+        @endif
     </div>
 @endsection

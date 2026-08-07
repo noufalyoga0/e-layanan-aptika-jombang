@@ -20,11 +20,11 @@
                     <a href="{{ route('admin.users') }}" class="btn btn-emerald bg-emerald-600 hover:bg-emerald-500 border-0 text-white px-4 py-2 rounded-xl">
                         <i class="fa-solid fa-users-gear me-1"></i> Kelola User & Akun OPD
                     </a>
-                    <a href="{{ route('verifikasi') }}" class="btn btn-light bg-white/10 hover:bg-white/20 border-0 text-white px-4 py-2 rounded-xl">
-                        <i class="fa-solid fa-list-check me-1"></i> Buka Meja Verifikasi
+                    <a href="{{ route('tickets.index') }}" class="btn btn-light bg-white/10 hover:bg-white/20 border-0 text-white px-4 py-2 rounded-xl">
+                        <i class="fa-solid fa-ticket me-1"></i> Lihat Daftar Tiket
                     </a>
-                    <a href="{{ route('workspace.tech') }}" class="btn btn-light bg-white/10 hover:bg-white/20 border-0 text-white px-4 py-2 rounded-xl">
-                        <i class="fa-solid fa-laptop-code me-1"></i> Buka Workspace Teknisi
+                    <a href="{{ route('analytics') }}" class="btn btn-light bg-white/10 hover:bg-white/20 border-0 text-white px-4 py-2 rounded-xl">
+                        <i class="fa-solid fa-chart-line me-1"></i> SLA & SPBE Analytics
                     </a>
                 </div>
             </div>
