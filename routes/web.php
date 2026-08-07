@@ -30,25 +30,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/analytics', [LayananController::class, 'analytics'])->name('analytics');
     Route::get('/analytics/export-csv', [LayananController::class, 'exportCsv'])->name('analytics.export');
 
-    // ── Admin OPD: Buat Pengajuan (verifikator tidak boleh mengajukan) ───
-    Route::middleware('role:opd,super_admin')->group(function () {
+    // ── Admin OPD: Buat Pengajuan (hanya OPD, bukan super_admin/verifikator) ──
+    Route::middleware('role:opd')->group(function () {
         Route::get('/pengajuan', [LayananController::class, 'pengajuanForm'])->name('pengajuan.form');
         Route::post('/pengajuan', [TicketController::class, 'store'])->name('pengajuan.store');
     });
 
-    // ── Verifikator APTIKA ────────────────────────────────────────────────
-    Route::middleware('role:admin_aptika,super_admin')->group(function () {
+    // ── Verifikator APTIKA (hanya admin_aptika, bukan super_admin) ────────
+    Route::middleware('role:admin_aptika')->group(function () {
         Route::get('/verifikasi', [TicketController::class, 'verifikasi'])->name('verifikasi');
         Route::post('/verifikasi/{ticketId}/approve', [TicketController::class, 'approve'])->name('verifikasi.approve');
         Route::post('/verifikasi/{ticketId}/tolak', [TicketController::class, 'tolak'])->name('verifikasi.tolak');
     });
 
-    // ── Staf Teknisi ──────────────────────────────────────────────────────
-    Route::middleware('role:teknisi,super_admin')->group(function () {
-        Route::get('/workspace-tech', [TicketController::class, 'workspaceTech'])->name('workspace.tech');
-    });
+    // ── Staf Teknisi (hanya teknisi) ──────────────────────────────────────
     Route::middleware('role:teknisi')->group(function () {
+        Route::get('/workspace-tech', [TicketController::class, 'workspaceTech'])->name('workspace.tech');
         Route::post('/workspace-tech/{ticketId}/selesai', [TicketController::class, 'selesai'])->name('workspace.selesai');
+    });
+
+    // ── Kabid APTIKA ──────────────────────────────────────────────────────
+    Route::middleware('role:kabid,super_admin')->group(function () {
+        Route::get('/kabid/dashboard', [\App\Http\Controllers\KabidController::class, 'dashboard'])->name('kabid.dashboard');
     });
 
     // ── Super Admin ───────────────────────────────────────────────────────

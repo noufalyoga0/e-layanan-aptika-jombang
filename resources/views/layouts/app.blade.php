@@ -122,37 +122,60 @@
                 @auth
                     @php $role = Auth::user()->role; @endphp
 
-                    @if(in_array($role, ['opd', 'super_admin']))
+                    {{-- OPD: Buat Pengajuan --}}
+                    @if($role === 'opd')
                         <a href="{{ route('pengajuan.form') }}" class="nav-link-item text-emerald-700 {{ request()->routeIs('pengajuan.form') ? 'bg-emerald-50' : '' }}">
                             <i class="fa-solid fa-plus-circle"></i> Buat Pengajuan
                         </a>
                     @endif
 
-                    <a href="{{ route('tickets.index') }}" class="nav-link-item {{ request()->routeIs('tickets.index') ? 'active' : '' }}">
-                        <i class="fa-solid fa-ticket"></i> Daftar Tiket
-                    </a>
+                    {{-- Semua login kecuali super_admin: Daftar Tiket --}}
+                    @if($role !== 'super_admin')
+                        <a href="{{ route('tickets.index') }}" class="nav-link-item {{ request()->routeIs('tickets.index') ? 'active' : '' }}">
+                            <i class="fa-solid fa-ticket"></i> Daftar Tiket
+                        </a>
+                    @endif
 
-                    @if($role === 'admin_aptika' || $role === 'super_admin')
+                    {{-- Verifikator APTIKA --}}
+                    @if($role === 'admin_aptika')
                         <a href="{{ route('verifikasi') }}" class="nav-link-item text-amber-700 {{ request()->routeIs('verifikasi') ? 'bg-amber-50' : '' }}">
                             <i class="fa-solid fa-list-check"></i> Verifikasi
                         </a>
                     @endif
 
-                    @if(in_array($role, ['teknisi', 'super_admin']))
+                    {{-- Teknisi --}}
+                    @if($role === 'teknisi')
                         <a href="{{ route('workspace.tech') }}" class="nav-link-item text-sky-700 {{ request()->routeIs('workspace.tech') ? 'bg-sky-50' : '' }}">
                             <i class="fa-solid fa-sliders"></i> Workspace
                         </a>
                     @endif
 
-                    @if($role === 'super_admin')
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link-item text-white font-bold" style="background:linear-gradient(135deg,#581c87,#6b21a8);">
-                            <i class="fa-solid fa-crown" style="color:#fde047;"></i> Admin
+                    {{-- Kabid: Dashboard Eksekutif --}}
+                    @if($role === 'kabid')
+                        <a href="{{ route('kabid.dashboard') }}" class="nav-link-item text-indigo-700 {{ request()->routeIs('kabid.dashboard') ? 'bg-indigo-50' : '' }}">
+                            <i class="fa-solid fa-gauge-high"></i> Dashboard Kabid
                         </a>
                     @endif
 
-                    <a href="{{ route('analytics') }}" class="nav-link-item {{ request()->routeIs('analytics') ? 'active' : '' }}">
-                        <i class="fa-solid fa-chart-line"></i> SLA & SPBE
-                    </a>
+                    {{-- SLA & SPBE: semua kecuali super_admin --}}
+                    @if($role !== 'super_admin')
+                        <a href="{{ route('analytics') }}" class="nav-link-item {{ request()->routeIs('analytics') ? 'active' : '' }}">
+                            <i class="fa-solid fa-chart-line"></i> SLA & SPBE
+                        </a>
+                    @endif
+
+                    {{-- Super Admin: hanya panel admin --}}
+                    @if($role === 'super_admin')
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link-item text-white font-bold" style="background:linear-gradient(135deg,#581c87,#6b21a8);">
+                            <i class="fa-solid fa-crown" style="color:#fde047;"></i> Admin Panel
+                        </a>
+                        <a href="{{ route('tickets.index') }}" class="nav-link-item {{ request()->routeIs('tickets.index') ? 'active' : '' }}">
+                            <i class="fa-solid fa-ticket"></i> Daftar Tiket
+                        </a>
+                        <a href="{{ route('analytics') }}" class="nav-link-item {{ request()->routeIs('analytics') ? 'active' : '' }}">
+                            <i class="fa-solid fa-chart-line"></i> SLA & SPBE
+                        </a>
+                    @endif
                 @endauth
             </div>
 
@@ -208,37 +231,53 @@
                 @auth
                     @php $role = Auth::user()->role; @endphp
 
-                    @if(in_array($role, ['opd', 'super_admin']))
+                    @if($role === 'opd')
                         <a href="{{ route('pengajuan.form') }}" class="mobile-nav-item text-emerald-700 {{ request()->routeIs('pengajuan.form') ? 'bg-emerald-50' : '' }}">
                             <i class="fa-solid fa-plus-circle w-5 text-center"></i> Buat Pengajuan
                         </a>
                     @endif
 
-                    <a href="{{ route('tickets.index') }}" class="mobile-nav-item {{ request()->routeIs('tickets.index') ? 'bg-blue-50 text-blue-900' : '' }}">
-                        <i class="fa-solid fa-ticket w-5 text-center"></i> Daftar Tiket
-                    </a>
+                    @if($role !== 'super_admin')
+                        <a href="{{ route('tickets.index') }}" class="mobile-nav-item {{ request()->routeIs('tickets.index') ? 'bg-blue-50 text-blue-900' : '' }}">
+                            <i class="fa-solid fa-ticket w-5 text-center"></i> Daftar Tiket
+                        </a>
+                    @endif
 
-                    @if($role === 'admin_aptika' || $role === 'super_admin')
+                    @if($role === 'admin_aptika')
                         <a href="{{ route('verifikasi') }}" class="mobile-nav-item text-amber-700 {{ request()->routeIs('verifikasi') ? 'bg-amber-50' : '' }}">
                             <i class="fa-solid fa-list-check w-5 text-center"></i> Verifikasi APTIKA
                         </a>
                     @endif
 
-                    @if(in_array($role, ['teknisi', 'super_admin']))
+                    @if($role === 'teknisi')
                         <a href="{{ route('workspace.tech') }}" class="mobile-nav-item text-sky-700 {{ request()->routeIs('workspace.tech') ? 'bg-sky-50' : '' }}">
                             <i class="fa-solid fa-sliders w-5 text-center"></i> Workspace Teknisi
                         </a>
                     @endif
 
-                    @if($role === 'super_admin')
-                        <a href="{{ route('admin.dashboard') }}" class="mobile-nav-item font-bold" style="color:#7c3aed;">
-                            <i class="fa-solid fa-crown w-5 text-center" style="color:#d97706;"></i> Super Admin Center
+                    @if($role === 'kabid')
+                        <a href="{{ route('kabid.dashboard') }}" class="mobile-nav-item text-indigo-700 {{ request()->routeIs('kabid.dashboard') ? 'bg-indigo-50' : '' }}">
+                            <i class="fa-solid fa-gauge-high w-5 text-center"></i> Dashboard Kabid
                         </a>
                     @endif
 
-                    <a href="{{ route('analytics') }}" class="mobile-nav-item {{ request()->routeIs('analytics') ? 'bg-blue-50 text-blue-900' : '' }}">
-                        <i class="fa-solid fa-chart-line w-5 text-center"></i> SLA & SPBE
-                    </a>
+                    @if($role !== 'super_admin')
+                        <a href="{{ route('analytics') }}" class="mobile-nav-item {{ request()->routeIs('analytics') ? 'bg-blue-50 text-blue-900' : '' }}">
+                            <i class="fa-solid fa-chart-line w-5 text-center"></i> SLA & SPBE
+                        </a>
+                    @endif
+
+                    @if($role === 'super_admin')
+                        <a href="{{ route('admin.dashboard') }}" class="mobile-nav-item font-bold" style="color:#7c3aed;">
+                            <i class="fa-solid fa-crown w-5 text-center" style="color:#d97706;"></i> Admin Panel
+                        </a>
+                        <a href="{{ route('tickets.index') }}" class="mobile-nav-item {{ request()->routeIs('tickets.index') ? 'bg-blue-50 text-blue-900' : '' }}">
+                            <i class="fa-solid fa-ticket w-5 text-center"></i> Daftar Tiket
+                        </a>
+                        <a href="{{ route('analytics') }}" class="mobile-nav-item {{ request()->routeIs('analytics') ? 'bg-blue-50 text-blue-900' : '' }}">
+                            <i class="fa-solid fa-chart-line w-5 text-center"></i> SLA & SPBE
+                        </a>
+                    @endif
 
                     <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between">
                         <div class="text-xs font-bold text-slate-700">

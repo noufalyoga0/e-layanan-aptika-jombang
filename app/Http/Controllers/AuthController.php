@@ -29,7 +29,7 @@ class AuthController extends Controller
                 'super_admin'  => 'admin.dashboard',
                 'admin_aptika' => 'verifikasi',
                 'teknisi'      => 'workspace.tech',
-                'kabid'        => 'analytics',
+                'kabid'        => 'kabid.dashboard',
                 default        => 'tickets.index',
             };
 
