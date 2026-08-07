@@ -47,16 +47,17 @@ class AdminController extends Controller
         ]);
 
         User::create([
-            'name'     => $validated['name'],
-            'opd_name' => $validated['opd_name'],
-            'nip'      => $validated['nip'],
-            'email'    => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role'     => $validated['role'],
+            'name'                 => $validated['name'],
+            'opd_name'             => $validated['opd_name'],
+            'nip'                  => $validated['nip'],
+            'email'                => $validated['email'],
+            'password'             => Hash::make($validated['password']),
+            'role'                 => $validated['role'],
+            'must_change_password' => true, // wajib ganti saat login pertama
         ]);
 
         return redirect()->route('admin.users')
-            ->with('success', "✅ Akun baru '{$validated['name']}' berhasil ditambahkan ke sistem!");
+            ->with('success', "✅ Akun baru '{$validated['name']}' berhasil ditambahkan. User wajib ganti password saat login pertama.");
     }
 
     public function updatePassword(Request $request, User $user)
@@ -68,10 +69,13 @@ class AdminController extends Controller
             'new_password.min'       => 'Password minimal 6 karakter.',
         ]);
 
-        $user->update(['password' => Hash::make($request->new_password)]);
+        $user->update([
+            'password'             => Hash::make($request->new_password),
+            'must_change_password' => true, // wajib ganti saat login berikutnya
+        ]);
 
         return redirect()->route('admin.users')
-            ->with('success', "✅ Password akun '{$user->name}' berhasil diperbarui.");
+            ->with('success', "✅ Password akun '{$user->name}' berhasil direset. User akan diminta ganti password saat login berikutnya.");
     }
 
     public function deleteUser(User $user)

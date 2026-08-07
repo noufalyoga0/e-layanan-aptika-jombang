@@ -20,6 +20,12 @@ Route::middleware('guest')->group(function () {
 // Logout (perlu login)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+// Ganti password paksa (setelah Super Admin reset)
+Route::middleware('auth')->group(function () {
+    Route::get('/ganti-password', [AuthController::class, 'showChangePasswordForm'])->name('password.change.form');
+    Route::post('/ganti-password', [AuthController::class, 'changePassword'])->name('password.change.update');
+});
+
 // ─── SEMUA ROLE (harus login) ────────────────────────────────────────────────
 Route::middleware('auth')->group(function () {
 
