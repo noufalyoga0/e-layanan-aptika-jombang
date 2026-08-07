@@ -132,7 +132,7 @@
                         <i class="fa-solid fa-ticket"></i> Daftar Tiket
                     </a>
 
-                    @if($role === 'admin_aptika')
+                    @if($role === 'admin_aptika' || $role === 'super_admin')
                         <a href="{{ route('verifikasi') }}" class="nav-link-item text-amber-700 {{ request()->routeIs('verifikasi') ? 'bg-amber-50' : '' }}">
                             <i class="fa-solid fa-list-check"></i> Verifikasi
                         </a>
@@ -218,7 +218,7 @@
                         <i class="fa-solid fa-ticket w-5 text-center"></i> Daftar Tiket
                     </a>
 
-                    @if($role === 'admin_aptika')
+                    @if($role === 'admin_aptika' || $role === 'super_admin')
                         <a href="{{ route('verifikasi') }}" class="mobile-nav-item text-amber-700 {{ request()->routeIs('verifikasi') ? 'bg-amber-50' : '' }}">
                             <i class="fa-solid fa-list-check w-5 text-center"></i> Verifikasi APTIKA
                         </a>
@@ -269,11 +269,35 @@
     </nav>
 
 
-    <!-- Success Toast Alert -->
+    <!-- Flash Alerts (semua halaman) -->
     @if(session('success'))
         <div class="max-w-7xl mx-auto px-4 mt-4">
-            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 bg-emerald-100 text-emerald-900 font-semibold" role="alert">
+            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 bg-emerald-100 text-emerald-900 font-semibold rounded-2xl" role="alert">
                 <i class="fa-solid fa-circle-check me-2 text-emerald-600"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    @endif
+    @if(session('warning'))
+        <div class="max-w-7xl mx-auto px-4 mt-4">
+            <div class="alert alert-warning alert-dismissible fade show shadow-sm border-0 bg-amber-100 text-amber-900 font-semibold rounded-2xl" role="alert">
+                <i class="fa-solid fa-triangle-exclamation me-2 text-amber-600"></i> {{ session('warning') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="max-w-7xl mx-auto px-4 mt-4">
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 bg-rose-100 text-rose-900 font-semibold rounded-2xl" role="alert">
+                <i class="fa-solid fa-circle-xmark me-2 text-rose-600"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    @endif
+    @if($errors->any())
+        <div class="max-w-7xl mx-auto px-4 mt-4">
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 bg-rose-100 text-rose-900 font-semibold rounded-2xl" role="alert">
+                <i class="fa-solid fa-circle-xmark me-2 text-rose-600"></i> {{ $errors->first() }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         </div>

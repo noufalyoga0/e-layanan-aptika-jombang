@@ -69,13 +69,25 @@
                             </td>
                             <td>
                                 @if($u->role !== 'super_admin')
-                                    <form action="{{ route('admin.users.delete', $u->id, false) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus akun {{ $u->name }}?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger bg-rose-600 border-0 rounded-lg text-xs font-bold px-3 py-1">
-                                            <i class="fa-solid fa-trash-can"></i> Hapus
+                                    <div class="flex gap-1.5">
+                                        {{-- Tombol Reset Password --}}
+                                        <button type="button"
+                                            class="btn btn-sm btn-warning bg-amber-500 border-0 rounded-lg text-xs font-bold px-3 py-1 text-white"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal-reset-pw-{{ $u->id }}"
+                                            title="Reset Password">
+                                            <i class="fa-solid fa-key"></i>
                                         </button>
-                                    </form>
+                                        {{-- Tombol Hapus --}}
+                                        <form action="{{ route('admin.users.delete', $u->id, false) }}" method="POST"
+                                              onsubmit="return confirm('Yakin hapus akun {{ addslashes($u->name) }}? Tindakan ini tidak bisa dibatalkan.')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger bg-rose-600 border-0 rounded-lg text-xs font-bold px-3 py-1">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 @else
                                     <span class="text-slate-400 text-xs italic font-semibold">Protected</span>
                                 @endif
@@ -139,4 +151,45 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Reset Password (satu per user, di-loop) --}}
+    @foreach($users as $u)
+        @if($u->role !== 'super_admin')
+        <div class="modal fade" id="modal-reset-pw-{{ $u->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content rounded-3xl border-0 shadow-xl overflow-hidden">
+                    <div class="modal-header bg-amber-500 text-white px-6 py-4">
+                        <h5 class="modal-title font-bold text-sm">
+                            <i class="fa-solid fa-key me-2"></i>Reset Password
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="{{ route('admin.users.password', $u->id, false) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body p-5 space-y-3">
+                            <p class="text-xs text-slate-600 mb-3">
+                                Reset password untuk: <strong class="text-slate-900">{{ $u->name }}</strong>
+                            </p>
+                            <div>
+                                <label class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider">Password Baru</label>
+                                <input type="password" name="new_password" class="form-control rounded-xl text-sm py-2" placeholder="Minimal 6 karakter" required>
+                            </div>
+                            <div>
+                                <label class="form-label font-bold text-xs text-slate-700 uppercase tracking-wider">Konfirmasi Password Baru</label>
+                                <input type="password" name="new_password_confirmation" class="form-control rounded-xl text-sm py-2" placeholder="Ulangi password baru" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-slate-50 px-5 py-3">
+                            <button type="button" class="btn btn-light rounded-xl font-bold text-xs" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn bg-amber-500 text-white rounded-xl font-bold text-xs px-4 border-0">
+                                <i class="fa-solid fa-key me-1"></i> Simpan Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
+    @endforeach
 @endsection

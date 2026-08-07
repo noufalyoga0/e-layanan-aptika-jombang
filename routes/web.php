@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tiket/{ticketCode}/bast', [TicketController::class, 'printBast'])->name('tickets.bast');
     Route::get('/tiket/{ticketCode}/dokumen/{index}', [TicketController::class, 'viewDocument'])->name('tickets.document');
     Route::get('/analytics', [LayananController::class, 'analytics'])->name('analytics');
+    Route::get('/analytics/export-csv', [LayananController::class, 'exportCsv'])->name('analytics.export');
 
     // ── Admin OPD: Buat Pengajuan (verifikator tidak boleh mengajukan) ───
     Route::middleware('role:opd,super_admin')->group(function () {
@@ -36,7 +37,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // ── Verifikator APTIKA ────────────────────────────────────────────────
-    Route::middleware('role:admin_aptika')->group(function () {
+    Route::middleware('role:admin_aptika,super_admin')->group(function () {
         Route::get('/verifikasi', [TicketController::class, 'verifikasi'])->name('verifikasi');
         Route::post('/verifikasi/{ticketId}/approve', [TicketController::class, 'approve'])->name('verifikasi.approve');
         Route::post('/verifikasi/{ticketId}/tolak', [TicketController::class, 'tolak'])->name('verifikasi.tolak');
@@ -55,6 +56,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/admin/users', [\App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
         Route::post('/admin/users', [\App\Http\Controllers\AdminController::class, 'storeUser'])->name('admin.users.store');
+        Route::put('/admin/users/{user}/password', [\App\Http\Controllers\AdminController::class, 'updatePassword'])->name('admin.users.password');
         Route::delete('/admin/users/{user}', [\App\Http\Controllers\AdminController::class, 'deleteUser'])->name('admin.users.delete');
     });
 });

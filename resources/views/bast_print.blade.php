@@ -107,8 +107,13 @@
             <p>Jombang, {{ date('d F Y') }}</p>
             <p><strong>Diskominfo Kab. Jombang (APTIKA)</strong></p>
             <div class="ttd-space"></div>
-            <p><u><strong>Agus Setiawan, S.ST</strong></u></p>
-            <p>NIP. 19900112 201503 1 001</p>
+            @if($teknisi)
+                <p><u><strong>{{ $teknisi->name }}</strong></u></p>
+                <p>NIP. {{ $teknisi->nip ?? '....................................' }}</p>
+            @else
+                <p><u><strong>{{ $ticket->assigned_to }}</strong></u></p>
+                <p>NIP. ..............................................</p>
+            @endif
         </div>
     </div>
 

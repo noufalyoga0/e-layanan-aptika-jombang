@@ -59,6 +59,21 @@ class AdminController extends Controller
             ->with('success', "✅ Akun baru '{$validated['name']}' berhasil ditambahkan ke sistem!");
     }
 
+    public function updatePassword(Request $request, User $user)
+    {
+        $request->validate([
+            'new_password' => 'required|string|min:6|confirmed',
+        ], [
+            'new_password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'new_password.min'       => 'Password minimal 6 karakter.',
+        ]);
+
+        $user->update(['password' => Hash::make($request->new_password)]);
+
+        return redirect()->route('admin.users')
+            ->with('success', "✅ Password akun '{$user->name}' berhasil diperbarui.");
+    }
+
     public function deleteUser(User $user)
     {
         if ($user->role === 'super_admin') {
@@ -67,6 +82,6 @@ class AdminController extends Controller
         $name = $user->name;
         $user->delete();
         return redirect()->route('admin.users')
-            ->with('warning', "🗑️ Akun '{$name}' berhasil dihapus dari sistem.");
+            ->with('warning', "Akun '{$name}' berhasil dihapus dari sistem.");
     }
 }

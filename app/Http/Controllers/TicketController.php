@@ -17,11 +17,19 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         $query = Ticket::with('logs')->latest();
+        $user  = Auth::user();
+
+        // OPD hanya melihat tiket milik instansinya sendiri
+        if ($user && $user->role === 'opd') {
+            $query->where('opd_name', $user->opd_name);
+        }
 
         $search = $request->input('search');
         if ($search) {
-            $query->where('ticket_code', 'like', "%{$search}%")
+            $query->where(function ($q) use ($search) {
+                $q->where('ticket_code', 'like', "%{$search}%")
                   ->orWhere('opd_name', 'like', "%{$search}%");
+            });
         }
 
         $tickets = $query->get()->toArray();
@@ -56,29 +64,24 @@ class TicketController extends Controller
             return $t;
         }, $pendingTickets);
 
-        return view('verifikasi', compact('pendingTickets'));
+        // Ambil daftar teknisi dari database secara dinamis
+        $teknisiList = \App\Models\User::where('role', 'teknisi')
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        return view('verifikasi', compact('pendingTickets', 'teknisiList'));
     }
 
     public function workspaceTech()
     {
         $query = Ticket::with('logs')->whereIn('status', ['disposisi', 'diproses']);
 
-        $user = \Illuminate\Support\Facades\Auth::user();
+        $user = Auth::user();
 
-        // Pengecekan nama teknisi secara eksplisit (100% Presisi)
-        if ($user) {
-            $nameLower = strtolower($user->name);
-            if (str_contains($nameLower, 'agus')) {
-                $query->where('assigned_to', 'LIKE', '%Agus%');
-            } elseif (str_contains($nameLower, 'budi')) {
-                $query->where('assigned_to', 'LIKE', '%Budi%');
-            } elseif (str_contains($nameLower, 'citra')) {
-                $query->where('assigned_to', 'LIKE', '%Citra%');
-            } elseif (str_contains($nameLower, 'dian')) {
-                $query->where('assigned_to', 'LIKE', '%Dian%');
-            } elseif (strtolower($user->role) === 'teknisi') {
-                $query->where('assigned_to', 'LIKE', '%' . explode(' ', $user->name)[0] . '%');
-            }
+        // Filter tiket berdasarkan assigned_to yang cocok dengan nama user teknisi
+        // Super Admin melihat semua tiket aktif
+        if ($user && $user->role === 'teknisi') {
+            $query->where('assigned_to', 'LIKE', '%' . $user->name . '%');
         }
 
         $techTickets = $query->latest()->get()->toArray();
@@ -139,7 +142,12 @@ class TicketController extends Controller
         $request->validate($rules, $messages);
 
         $count = Ticket::count();
-        $newCode = 'REQ-JBG-' . date('Ym') . '-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+        // Generate kode tiket aman dari duplikat dengan query MAX
+        $prefix = 'REQ-JBG-' . date('Ym') . '-';
+        $lastCode = Ticket::where('ticket_code', 'like', $prefix . '%')
+            ->max('ticket_code');
+        $lastNum = $lastCode ? (int) substr($lastCode, strlen($prefix)) : 0;
+        $newCode = $prefix . str_pad($lastNum + 1, 3, '0', STR_PAD_LEFT);
 
         $serviceNameMap = [
             'subdomain_hosting' => 'Subdomain & Hosting VPS',
@@ -275,7 +283,16 @@ class TicketController extends Controller
     public function printBast(string $ticketCode)
     {
         $ticket = Ticket::where('ticket_code', $ticketCode)->firstOrFail();
-        return view('bast_print', compact('ticket'));
+
+        // Cari data teknisi yang mengerjakan berdasarkan nama di assigned_to
+        $teknisi = null;
+        if ($ticket->assigned_to && $ticket->assigned_to !== 'Belum Didisposisi') {
+            $teknisi = \App\Models\User::where('role', 'teknisi')
+                ->where('name', 'LIKE', '%' . explode(' ', $ticket->assigned_to)[0] . '%')
+                ->first();
+        }
+
+        return view('bast_print', compact('ticket', 'teknisi'));
     }
 
     public function viewDocument(string $ticketCode, int $index)
@@ -343,16 +360,6 @@ class TicketController extends Controller
     }
 
     // -----------------------------------------------------------------------
-    // RESET DATA DEMO (Re-run Seeder)
+    // RESET DATA DEMO - DIHAPUS (tidak dipakai di production)
     // -----------------------------------------------------------------------
-
-    public function resetDemo()
-    {
-        \Artisan::call('migrate:fresh', [
-            '--seed'  => true,
-            '--force' => true,
-        ]);
-        return redirect()->route('tickets.index')
-            ->with('success', '🔄 Database MySQL berhasil di-reset & di-seed ke kondisi awal!');
-    }
 }

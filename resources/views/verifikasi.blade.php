@@ -124,10 +124,9 @@
                                         </label>
                                         <select name="teknisi" class="form-select rounded-xl text-sm py-2.5" required>
                                             <option value="" disabled selected>-- Pilih Teknisi --</option>
-                                            <option value="Agus Setiawan (Teknisi Server/Hosting)">Agus Setiawan — Staf Server & Hosting</option>
-                                            <option value="Budi Raharjo (Staf TTE & BSRE)">Budi Raharjo — Staf Keamanan & TTE BSRE</option>
-                                            <option value="Citra Dewi (Developer Integrasi API)">Citra Dewi — Developer Integrasi API</option>
-                                            <option value="Dian Pratama (Helpdesk IT Support)">Dian Pratama — Helpdesk IT Support</option>
+                                            @foreach($teknisiList as $tek)
+                                                <option value="{{ $tek->name }}">{{ $tek->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
 

@@ -9,9 +9,9 @@
             <h1 class="text-2xl font-extrabold text-white mb-1">Executive Dashboard SPBE & SLA APTIKA</h1>
             <p class="text-slate-400 text-xs mb-0">Statistik Kinerja Pelayanan & Indikator Sistem Pemerintahan Berbasis Elektronik Kabupaten Jombang</p>
         </div>
-        <button class="btn btn-light rounded-xl font-bold text-xs px-4 py-2 bg-white text-slate-900 hover:bg-slate-100" onclick="alert('Rekapitulasi Excel Berhasil Diunduh!')">
-            <i class="fa-solid fa-file-excel text-emerald-600 me-1"></i> Export Rekap Excel
-        </button>
+        <a href="{{ route('analytics.export') }}" class="btn btn-light rounded-xl font-bold text-xs px-4 py-2 bg-white text-slate-900 hover:bg-slate-100 no-underline">
+            <i class="fa-solid fa-file-csv text-emerald-600 me-1"></i> Export Rekap CSV
+        </a>
     </div>
 
     <!-- Stats Overview Cards (Realtime Database Data) -->
