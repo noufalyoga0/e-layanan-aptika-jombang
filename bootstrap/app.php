@@ -19,9 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'guest'            => \App\Http\Middleware\RedirectIfAuthenticated::class,
             'force.pw.change'  => \App\Http\Middleware\ForcedPasswordChange::class,
         ]);
-
-        // Terapkan forced password change ke semua web route yang auth
-        $middleware->appendToGroup('web', \App\Http\Middleware\ForcedPasswordChange::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
