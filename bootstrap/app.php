@@ -15,9 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
 
         $middleware->alias([
-            'role'             => \App\Http\Middleware\CheckRole::class,
-            'guest'            => \App\Http\Middleware\RedirectIfAuthenticated::class,
-            'force.pw.change'  => \App\Http\Middleware\ForcedPasswordChange::class,
+            'role'  => \App\Http\Middleware\CheckRole::class,
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
