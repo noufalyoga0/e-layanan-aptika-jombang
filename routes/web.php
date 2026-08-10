@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // ─── SEMUA ROLE (harus login) ────────────────────────────────────────────────
-Route::middleware(['auth', 'force.pw.change'])->group(function () {
+Route::middleware('auth')->group(function () {
 
     // Lacak tiket & cetak BAST (semua role boleh lihat)
     Route::get('/tiket', [TicketController::class, 'index'])->name('tickets.index');
