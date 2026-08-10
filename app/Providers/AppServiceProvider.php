@@ -21,15 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Hanya paksa HTTPS jika di luar environment local (seperti di server hosting)
+        // Paksa HTTPS di production (Railway sudah handle SSL-nya)
         if (config('app.env') !== 'local') {
             URL::forceScheme('https');
-
-            // Otomatis redirect HTTP ke HTTPS jika diakses via HTTP di server hosting
-            if (request()->header('x-forwarded-proto') === 'http') {
-                header('Location: https://' . request()->getHttpHost() . request()->getRequestUri(), true, 301);
-                exit();
-            }
         }
     }
 }
