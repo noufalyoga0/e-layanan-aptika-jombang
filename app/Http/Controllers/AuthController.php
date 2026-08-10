@@ -74,36 +74,6 @@ class AuthController extends Controller
             ->with('success', "Registrasi berhasil! Akun OPD {$user->opd_name} aktif.");
     }
 
-    public function showChangePasswordForm()
-    {
-        return view('auth.change_password');
-    }
-
-    public function changePassword(Request $request)
-    {
-        $request->validate([
-            'new_password' => 'required|string|min:8|confirmed',
-        ], [
-            'new_password.min'       => 'Password baru minimal 8 karakter.',
-            'new_password.confirmed' => 'Konfirmasi password tidak cocok.',
-        ]);
-
-        Auth::user()->update([
-            'password'             => Hash::make($request->new_password),
-            'must_change_password' => false,
-        ]);
-
-        return redirect()->intended(
-            match (Auth::user()->role) {
-                'super_admin'  => route('admin.dashboard'),
-                'admin_aptika' => route('verifikasi'),
-                'teknisi'      => route('workspace.tech'),
-                'kabid'        => route('kabid.dashboard'),
-                default        => route('tickets.index'),
-            }
-        )->with('success', '✅ Password berhasil diperbarui. Selamat datang!');
-    }
-
     public function logout(Request $request)
     {
         Auth::logout();
