@@ -5,6 +5,17 @@ use App\Http\Controllers\LayananController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AuthController;
 
+// ─── TEMP RESET (hapus setelah database bersih) ─────────────────────────────
+Route::get('/emergency-reset', function () {
+    try {
+        DB::table('users')->update(['must_change_password' => 0]);
+        try { DB::table('sessions')->truncate(); } catch (\Exception $e) {}
+        return response()->json(['status' => 'OK - must_change_password reset, sessions cleared']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()]);
+    }
+});
+
 // ─── PUBLIC (tidak perlu login) ─────────────────────────────────────────────
 Route::get('/', [LayananController::class, 'index'])->name('home');
 Route::get('/katalog', [LayananController::class, 'katalog'])->name('katalog');
