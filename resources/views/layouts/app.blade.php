@@ -5,8 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'E-Layanan APTIKA - Diskominfo Kabupaten Jombang')</title>
     
-    <!-- Vite: Tailwind + Bootstrap (bundled lokal, no CDN) -->
+    <!-- Vite: Bootstrap JS + CSS bundle (no CDN, no FOUC) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Tailwind CSS CDN dengan safelist lengkap -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0f2c59',
+                            emerald: '#059669',
+                            cyan: '#0891b2',
+                            gold: '#d97706'
+                        }
+                    }
+                }
+            },
+            safelist: [
+                { pattern: /^(bg|text|border)-(blue|emerald|amber|purple|sky|rose|slate|cyan|indigo)-(50|100|200|300|400|500|600|700|800|900|950)$/ },
+                { pattern: /^(fa|fa-solid|fa-regular)$/ }
+            ]
+        }
+    </script>
 
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

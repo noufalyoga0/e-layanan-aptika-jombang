@@ -1,20 +1,2 @@
-/* Bootstrap harus masuk lebih dulu sebelum Tailwind base/preflight */
+/* Bootstrap CSS — di-bundle lokal via Vite agar tidak ada jeda load dari CDN */
 @import 'bootstrap/dist/css/bootstrap.min.css';
-
-/* Tailwind: hanya utilities & components, nonaktifkan preflight agar tidak konflik Bootstrap */
-@import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/utilities.css' layer(utilities);
-
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
-
-    /* Custom brand colors (sebelumnya di Tailwind CDN config) */
-    --color-brand-blue: #0f2c59;
-    --color-brand-emerald: #059669;
-    --color-brand-cyan: #0891b2;
-    --color-brand-gold: #d97706;
-}
