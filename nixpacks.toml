@@ -1,8 +1,14 @@
 [phases.install]
-cmds = ["composer install --no-dev --optimize-autoloader"]
+cmds = [
+    "composer install --no-dev --optimize-autoloader",
+    "npm install"
+]
 
 [phases.build]
-cmds = ["chmod +x docker/start.sh"]
+cmds = [
+    "npm run build",
+    "chmod +x docker/start.sh"
+]
 
 [start]
 cmd = "sh docker/start.sh"

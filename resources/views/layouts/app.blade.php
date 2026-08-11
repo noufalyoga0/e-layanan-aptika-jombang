@@ -5,21 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'E-Layanan APTIKA - Diskominfo Kabupaten Jombang')</title>
     
-    <!-- Tailwind CSS CDN -->
-    <script>
-        tailwind = { config: {
-            theme: { extend: { colors: { brand: { blue: '#0f2c59', emerald: '#059669', cyan: '#0891b2', gold: '#d97706' } } } }
-        }};
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Bootstrap 5 CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <!-- Vite: Tailwind + Bootstrap (bundled lokal, no CDN) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -354,8 +345,7 @@
         </div>
     </footer>
 
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 5 JS sudah di-bundle via Vite (resources/js/app.js) -->
     <script>
         // Hamburger menu toggle
         document.addEventListener('DOMContentLoaded', function () {
