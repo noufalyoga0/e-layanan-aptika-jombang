@@ -6,27 +6,13 @@
     <title>@yield('title', 'E-Layanan APTIKA - Diskominfo Kabupaten Jombang')</title>
     
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            blue: '#0f2c59',
-                            emerald: '#059669',
-                            cyan: '#0891b2',
-                            gold: '#d97706'
-                        }
-                    }
-                }
-            },
-            safelist: [
-                { pattern: /^(bg|text|border)-(blue|emerald|amber|purple|sky|rose|slate|cyan|indigo)-(50|100|200|300|400|500|600|700|800|900|950)$/ },
-                { pattern: /^(fa|fa-solid|fa-regular)$/ }
-            ]
-        }
+        // Pre-define config sebelum Tailwind load
+        window.tailwind = { config: {
+            theme: { extend: { colors: { brand: { blue: '#0f2c59', emerald: '#059669', cyan: '#0891b2', gold: '#d97706' } } } }
+        }};
     </script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
     
     <!-- Bootstrap 5 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
