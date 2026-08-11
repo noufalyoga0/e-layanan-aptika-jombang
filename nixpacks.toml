@@ -1,7 +1,10 @@
+[providers]
+providers = ["php", "node"]
+
 [phases.install]
 cmds = [
     "composer install --no-dev --optimize-autoloader",
-    "npm install"
+    "npm ci"
 ]
 
 [phases.build]
